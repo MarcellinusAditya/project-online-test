@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Generator - Upload &amp; Configure | TestFlow Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#e7eefe",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#464555",
+                        "on-primary-container": "#dad7ff",
+                        "on-secondary-fixed": "#141b2b",
+                        "surface": "#f9f9ff",
+                        "surface-dim": "#d3daea",
+                        "on-surface": "#151c27",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-bright": "#f9f9ff",
+                        "secondary": "#575e70",
+                        "surface-container-highest": "#dce2f3",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "tertiary": "#7e3000",
+                        "inverse-primary": "#c3c0ff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#777587",
+                        "primary-container": "#4f46e5",
+                        "secondary-fixed": "#dce2f7",
+                        "on-primary-fixed": "#0f0069",
+                        "outline-variant": "#c7c4d8",
+                        "secondary-container": "#d9dff5",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#c0c6db",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#ebf1ff",
+                        "on-secondary-container": "#5c6274",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2a313d",
+                        "surface-tint": "#4d44e3",
+                        "tertiary-container": "#a44100",
+                        "background": "#f9f9ff",
+                        "surface-container-high": "#e2e8f8",
+                        "on-tertiary-fixed": "#351000",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "primary": "#3525cd",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#ffd2be",
+                        "surface-variant": "#dce2f3",
+                        "primary-fixed": "#e2dfff",
+                        "on-background": "#151c27",
+                        "on-secondary-fixed-variant": "#404758"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "48px",
+                        "container-padding": "32px",
+                        "sidebar-collapsed": "72px",
+                        "gutter": "24px",
+                        "base": "4px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "body-sm": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "mono-label": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        body { background-color: #FAFAFA; }
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased bg-background overflow-x-hidden min-h-screen">
+<!-- SideNavBar -->
+<nav class="bg-surface dark:bg-inverse-surface text-primary-container dark:text-primary-fixed font-body-sm text-body-sm w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant dark:border-outline z-20">
+<div class="flex flex-col h-full p-4">
+<div class="mb-8 px-3 pt-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary font-bold">TF</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface dark:text-inverse-on-surface leading-none">TestFlow Pro</h1>
+<p class="text-on-surface-variant text-xs mt-1">HR Workspace</p>
+</div>
+</div>
+</div>
+<button class="mb-6 mx-3 bg-primary-container hover:bg-primary text-on-primary rounded-lg py-2 px-4 flex items-center justify-center gap-2 transition-colors duration-200">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="font-medium">Create New Test</span>
+</button>
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="quiz">quiz</span>
+                    Tests
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="database">database</span>
+                    Question Bank
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary border-l-2 border-primary-container cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="auto_awesome">auto_awesome</span>
+                    AI Generator
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="insights">insights</span>
+                    Results
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</div>
+<div class="mt-auto space-y-1 pt-4 border-t border-outline-variant dark:border-outline">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+                    Help Center
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+                    Log Out
+                </a>
+</div>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest dark:bg-surface-dim text-primary dark:text-primary-fixed font-body-md text-body-md h-16 fixed top-0 right-0 left-sidebar-width z-10 border-b border-outline-variant dark:border-outline focus-within:ring-2 focus-within:ring-primary-container">
+<div class="flex justify-between items-center px-gutter w-full h-full">
+<div class="flex items-center">
+<!-- Search Bar -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-surface rounded-md border border-outline-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container text-sm text-on-surface placeholder:text-on-surface-variant" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden border border-outline-variant ml-2">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCepu4V3alPaB_VU_1un1-Ep1pUdXivnhXbufW8CBSl9lDKpKpAolu2X2w6sw1GCxgQ3p1H2FaFXiwxE2rEPQdIFPhFFEkb_IQzLAlrZTeD2SQtx4hsnPeNQp6mynDIWdAuRQ66nFdyp8nRbCD3TxI91FvOKQ-b1e8R-Bi2LgvZD5hk-Fr1cas7EjmR9ZiF2J1hK3FO-RxLmeEN8KnZm41UbKUqODb4zIHQtu1iuVgD2j95ctNdhXXZ"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-sidebar-width pt-16 pb-24 min-h-screen">
+<div class="max-w-[800px] mx-auto px-container-padding py-section-gap">
+<!-- Header Section -->
+<div class="mb-8">
+<h2 class="font-display-lg text-display-lg text-on-surface mb-2">Generate Questions with AI</h2>
+<p class="text-on-surface-variant text-body-md">Turn your PDF materials into ready-to-use test questions.</p>
+</div>
+<div class="space-y-6">
+<!-- 1. PDF Upload Area (Uploaded State) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm relative overflow-hidden group">
+<!-- Progress Bar (simulate 100%) -->
+<div class="absolute top-0 left-0 h-1 bg-primary-container w-full"></div>
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low border border-outline-variant flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[28px]">picture_as_pdf</span>
+</div>
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface flex items-center gap-2">
+                                    matematika-dasar.pdf
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-800 tracking-wide uppercase">Ready</span>
+</h3>
+<p class="text-on-surface-variant font-mono-label text-mono-label mt-1">2.4 MB • 24 pages • Uploaded just now</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-on-surface-variant hover:text-primary-container p-2 rounded hover:bg-surface-container-low transition-colors text-sm font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">find_replace</span>
+                                Replace
+                            </button>
+<button class="text-on-surface-variant hover:text-error p-2 rounded hover:bg-error-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 2. Source Type -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-4">What is inside this PDF?</h3>
+<div class="grid grid-cols-2 gap-4">
+<label class="relative flex cursor-pointer rounded-lg border bg-surface-container-low p-4 focus:outline-none border-primary-container ring-1 ring-primary-container">
+<input checked="" class="sr-only" name="source_type" type="radio" value="learning"/>
+<div class="flex w-full items-center justify-between">
+<div class="flex items-center">
+<div class="text-sm">
+<p class="font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[20px]">menu_book</span>
+                                            Learning Material
+                                        </p>
+<div class="text-on-surface-variant font-body-sm text-body-sm mt-1">Generate new questions based on concepts in the text.</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary-container filled">radio_button_checked</span>
+</div>
+</label>
+<label class="relative flex cursor-pointer rounded-lg border border-outline-variant bg-surface-container-lowest p-4 focus:outline-none hover:bg-surface-container-low transition-colors">
+<input class="sr-only" name="source_type" type="radio" value="existing"/>
+<div class="flex w-full items-center justify-between">
+<div class="flex items-center">
+<div class="text-sm">
+<p class="font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">list_alt</span>
+                                            Existing Questions
+                                        </p>
+<div class="text-on-surface-variant font-body-sm text-body-sm mt-1">Extract and convert existing questions into digital format.</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span>
+</div>
+</label>
+</div>
+</div>
+<!-- 3. Question Configuration -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-6 border-b border-outline-variant pb-2">Question Configuration</h3>
+<div class="grid grid-cols-2 gap-x-6 gap-y-6">
+<!-- Question Type -->
+<div>
+<label class="block text-[14px] font-medium text-on-surface mb-2">Question Type</label>
+<select class="w-full rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary-container focus:ring-primary-container shadow-sm">
+<option>Multiple Choice</option>
+<option>Essay</option>
+<option>Both Mixed</option>
+</select>
+</div>
+<!-- Number of Questions -->
+<div>
+<label class="block text-[14px] font-medium text-on-surface mb-2">Number of Questions</label>
+<div class="flex rounded-md shadow-sm">
+<select class="rounded-l-md border-r-0 border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary-container focus:ring-primary-container flex-1">
+<option>10</option>
+<option selected="">20</option>
+<option>30</option>
+<option>Custom</option>
+</select>
+<span class="inline-flex items-center rounded-r-md border border-l-0 border-outline-variant px-3 text-sm text-on-surface-variant bg-surface-container-low">
+                                    items
+                                </span>
+</div>
+</div>
+<!-- Difficulty -->
+<div>
+<label class="block text-[14px] font-medium text-on-surface mb-2">Difficulty Level</label>
+<select class="w-full rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary-container focus:ring-primary-container shadow-sm">
+<option>Easy</option>
+<option>Medium</option>
+<option>Hard</option>
+<option selected="">Mixed</option>
+</select>
+</div>
+<!-- Language -->
+<div>
+<label class="block text-[14px] font-medium text-on-surface mb-2">Target Language</label>
+<select class="w-full rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary-container focus:ring-primary-container shadow-sm">
+<option selected="">Indonesian</option>
+<option>English</option>
+</select>
+</div>
+<!-- Category -->
+<div class="col-span-2">
+<label class="block text-[14px] font-medium text-on-surface mb-2">Subject Category</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary-container focus:ring-primary-container shadow-sm" type="text" value="Mathematics"/>
+</div>
+<!-- Instructions -->
+<div class="col-span-2">
+<label class="block text-[14px] font-medium text-on-surface mb-2">Optional Instructions for AI</label>
+<textarea class="w-full rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary-container focus:ring-primary-container shadow-sm placeholder:text-on-surface-variant" placeholder="e.g. Focus on chapter 2 and 3. Avoid questions about historical dates." rows="3"></textarea>
+<p class="mt-1 text-[12px] text-on-surface-variant">Provide specific context to guide the generation process.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Sticky Summary -->
+<div class="fixed bottom-0 left-sidebar-width right-0 bg-surface-container-lowest border-t border-outline-variant p-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] z-20">
+<div class="max-w-[800px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container text-[24px]">auto_awesome</span>
+<div>
+<div class="font-medium text-sm text-on-surface flex gap-2 items-center">
+<span>Source: matematika-dasar.pdf</span>
+<span class="text-outline-variant">•</span>
+<span>Learning Material</span>
+</div>
+<div class="text-xs text-on-surface-variant mt-0.5">
+                        20 Questions | Mixed Difficulty | Indonesian
+                    </div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-sm font-medium text-on-surface bg-surface-container-lowest border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors">
+                    Save Draft
+                </button>
+<button class="px-6 py-2 text-sm font-medium text-on-primary bg-primary-container rounded-lg hover:bg-primary transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">magic_button</span>
+                    Generate Questions
+                </button>
+</div>
+</div>
+</div>
+</body></html>

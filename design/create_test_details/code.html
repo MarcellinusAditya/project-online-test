@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create New Test - Step 1: Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#dce2f3",
+                    "on-surface-variant": "#464555",
+                    "outline-variant": "#c7c4d8",
+                    "primary": "#3525cd",
+                    "secondary-fixed": "#dce2f7",
+                    "primary-container": "#4f46e5",
+                    "secondary-fixed-dim": "#c0c6db",
+                    "tertiary-container": "#a44100",
+                    "error": "#ba1a1a",
+                    "secondary": "#575e70",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#141b2b",
+                    "surface": "#f9f9ff",
+                    "surface-dim": "#d3daea",
+                    "on-tertiary-fixed-variant": "#7b2f00",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "surface-bright": "#f9f9ff",
+                    "on-background": "#151c27",
+                    "on-secondary-fixed-variant": "#404758",
+                    "inverse-on-surface": "#ebf1ff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e2e8f8",
+                    "surface-tint": "#4d44e3",
+                    "on-surface": "#151c27",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#351000",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#ffd2be",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2a313d",
+                    "surface-container-highest": "#dce2f3",
+                    "background": "#f9f9ff",
+                    "tertiary-fixed-dim": "#ffb695",
+                    "on-secondary-container": "#5c6274",
+                    "primary-fixed": "#e2dfff",
+                    "surface-container": "#e7eefe",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#0f0069",
+                    "tertiary": "#7e3000",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "inverse-primary": "#c3c0ff",
+                    "on-primary-container": "#dad7ff",
+                    "outline": "#777587",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f0f3ff",
+                    "secondary-container": "#d9dff5",
+                    "tertiary-fixed": "#ffdbcc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "base": "4px",
+                    "container-padding": "32px",
+                    "sidebar-width": "260px",
+                    "section-gap": "48px",
+                    "sidebar-collapsed": "72px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "mono-label": ["jetbrainsMono"],
+                    "display-lg-mobile": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "mono-label": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden">
+<!-- Top Navigation / Progress Shell -->
+<header class="fixed top-0 left-0 right-0 z-30 h-16 flex flex-col justify-center px-container-padding bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<div class="max-w-[800px] w-full mx-auto flex items-center justify-between">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span>Cancel</span>
+</div>
+<!-- Step Indicator -->
+<nav aria-label="Progress" class="flex items-center gap-8">
+<ol class="flex items-center gap-8" role="list">
+<!-- Step 1: Active -->
+<li class="relative">
+<div class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-container text-on-primary font-title-sm text-title-sm shadow-sm ring-2 ring-primary-container ring-offset-2 ring-offset-surface">
+                                1
+                            </span>
+<span class="font-title-sm text-title-sm text-primary">Details</span>
+</div>
+</li>
+<!-- Divider -->
+<li class="w-12 h-px bg-outline-variant"></li>
+<!-- Step 2: Upcoming -->
+<li class="relative">
+<div class="flex items-center gap-3 opacity-60">
+<span class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-variant border border-outline-variant text-on-surface-variant font-title-sm text-title-sm">
+                                2
+                            </span>
+<span class="font-body-md text-body-md text-on-surface-variant">Questions</span>
+</div>
+</li>
+<!-- Divider -->
+<li class="w-12 h-px bg-outline-variant"></li>
+<!-- Step 3: Upcoming -->
+<li class="relative hidden sm:block">
+<div class="flex items-center gap-3 opacity-60">
+<span class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-variant border border-outline-variant text-on-surface-variant font-title-sm text-title-sm">
+                                3
+                            </span>
+<span class="font-body-md text-body-md text-on-surface-variant">Settings</span>
+</div>
+</li>
+</ol>
+</nav>
+<div class="w-[88px]"></div> <!-- Spacer to balance header -->
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-32 px-container-padding flex justify-center">
+<div class="w-full max-w-[800px] flex flex-col gap-8">
+<!-- Page Header -->
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Test Details</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Provide the foundational information for your new assessment.</p>
+</div>
+<!-- Form Container (Card Level 1) -->
+<form class="bg-surface-container-lowest rounded-lg border border-outline-variant p-8 flex flex-col gap-8 shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
+<!-- Title & Description Section -->
+<section class="flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-title-sm text-title-sm text-on-surface" for="test-title">Test Title</label>
+<input class="w-full rounded bg-surface-bright border border-outline-variant px-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" id="test-title" name="test-title" placeholder="e.g. Mathematics Final Assessment" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-title-sm text-title-sm text-on-surface flex justify-between" for="test-description">
+                            Description
+                            <span class="font-body-sm text-body-sm text-outline font-normal">Optional</span>
+</label>
+<textarea class="w-full rounded bg-surface-bright border border-outline-variant px-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none resize-y" id="test-description" name="test-description" placeholder="Describe what this test is about..." rows="4"></textarea>
+</div>
+</section>
+<hr class="border-outline-variant/50"/>
+<!-- Scheduling & Timing Section -->
+<section class="flex flex-col gap-6">
+<h2 class="font-headline-md text-headline-md text-on-surface">Schedule &amp; Duration</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Start Time -->
+<div class="flex flex-col gap-2">
+<label class="font-title-sm text-title-sm text-on-surface">Available From</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">calendar_today</span>
+<input class="w-full rounded bg-surface-bright border border-outline-variant pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" type="datetime-local"/>
+</div>
+</div>
+<!-- End Time -->
+<div class="flex flex-col gap-2">
+<label class="font-title-sm text-title-sm text-on-surface">Available Until</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">event_busy</span>
+<input class="w-full rounded bg-surface-bright border border-outline-variant pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" type="datetime-local"/>
+</div>
+</div>
+</div>
+<!-- Duration -->
+<div class="flex flex-col gap-2">
+<label class="font-title-sm text-title-sm text-on-surface" for="test-duration">Time Limit</label>
+<div class="flex items-center gap-3">
+<div class="relative w-32">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">timer</span>
+<input class="w-full rounded bg-surface-bright border border-outline-variant pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" id="test-duration" min="1" name="test-duration" placeholder="60" type="number"/>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant">minutes</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline mt-1">Leave empty or set to 0 for untimed tests.</p>
+</div>
+</section>
+<hr class="border-outline-variant/50"/>
+<!-- Visibility Section -->
+<section class="flex flex-col gap-6">
+<h2 class="font-headline-md text-headline-md text-on-surface">Result Visibility</h2>
+<div class="flex flex-col gap-4">
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="flex items-center h-6">
+<input checked="" class="w-4 h-4 text-primary bg-surface border-outline-variant focus:ring-primary/20 focus:ring-2 cursor-pointer mt-1" name="result_visibility" type="radio" value="immediate"/>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface group-hover:text-primary transition-colors">Show result immediately</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Students will see their score and feedback as soon as they submit.</span>
+</div>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="flex items-center h-6">
+<input class="w-4 h-4 text-primary bg-surface border-outline-variant focus:ring-primary/20 focus:ring-2 cursor-pointer mt-1" name="result_visibility" type="radio" value="hidden"/>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface group-hover:text-primary transition-colors">Hide result</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Scores will be held until manually released by an administrator.</span>
+</div>
+</label>
+</div>
+</section>
+</form>
+</div>
+</main>
+<!-- Bottom Sticky Action Bar -->
+<div class="fixed bottom-0 left-0 right-0 z-40 bg-surface border-t border-outline-variant p-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+<div class="max-w-[800px] mx-auto flex items-center justify-between">
+<button class="px-6 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-title-sm text-title-sm hover:bg-surface-variant transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">draft</span>
+                Save as Draft
+            </button>
+<button class="px-6 py-2 rounded-lg bg-primary-container text-on-primary font-title-sm text-title-sm hover:bg-primary transition-colors flex items-center gap-2" type="button">
+                Continue
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

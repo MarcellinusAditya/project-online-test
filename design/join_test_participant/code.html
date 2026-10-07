@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Join Test - TestFlow Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#e2dfff",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#151c27",
+                      "surface-tint": "#4d44e3",
+                      "surface-container-lowest": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed": "#ffdbcc",
+                      "surface-container-low": "#f0f3ff",
+                      "primary-container": "#4f46e5",
+                      "inverse-on-surface": "#ebf1ff",
+                      "surface-bright": "#f9f9ff",
+                      "background": "#f9f9ff",
+                      "on-secondary-fixed-variant": "#404758",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#d9dff5",
+                      "tertiary-container": "#a44100",
+                      "on-primary-container": "#dad7ff",
+                      "tertiary": "#7e3000",
+                      "secondary": "#575e70",
+                      "inverse-primary": "#c3c0ff",
+                      "error": "#ba1a1a",
+                      "inverse-surface": "#2a313d",
+                      "on-tertiary-fixed-variant": "#7b2f00",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "outline-variant": "#c7c4d8",
+                      "secondary-fixed": "#dce2f7",
+                      "on-error-container": "#93000a",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb695",
+                      "on-primary-fixed": "#0f0069",
+                      "secondary-fixed-dim": "#c0c6db",
+                      "on-surface-variant": "#464555",
+                      "primary": "#3525cd",
+                      "on-tertiary-fixed": "#351000",
+                      "on-background": "#151c27",
+                      "surface-container-high": "#e2e8f8",
+                      "surface": "#f9f9ff",
+                      "outline": "#777587",
+                      "surface-dim": "#d3daea",
+                      "on-secondary-fixed": "#141b2b",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "surface-variant": "#dce2f3",
+                      "surface-container": "#e7eefe",
+                      "surface-container-highest": "#dce2f3",
+                      "on-tertiary-container": "#ffd2be",
+                      "on-secondary-container": "#5c6274"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "260px",
+                      "section-gap": "48px",
+                      "base": "4px",
+                      "gutter": "24px",
+                      "container-padding": "32px",
+                      "sidebar-collapsed": "72px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "mono-label": [
+                              "jetbrainsMono"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "title-sm": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "mono-label": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "title-sm": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+      </style>
+</head>
+<body class="bg-[#FAFAFA] min-h-screen flex items-center justify-center p-container-padding text-on-surface">
+<div class="w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-xl p-8 flex flex-col gap-6 shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+<!-- Header -->
+<div class="flex flex-col items-center text-center gap-4 border-b border-outline-variant pb-6">
+<div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">quiz</span>
+</div>
+<div>
+<h1 class="font-display-lg text-display-lg md:font-display-lg md:text-display-lg font-display-lg-mobile text-display-lg-mobile mb-2">Join Test</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Enter the test token provided by your teacher or test administrator.</p>
+</div>
+</div>
+<!-- Form -->
+<form class="flex flex-col gap-6">
+<div class="flex flex-col gap-2 relative group">
+<label class="font-body-sm text-body-sm font-medium text-on-surface" for="testToken">Test Token</label>
+<div class="relative">
+<input aria-describedby="tokenHelp" class="w-full h-12 px-4 rounded-lg border border-outline-variant bg-surface-container-lowest font-mono-label text-mono-label placeholder:text-outline focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all uppercase" id="testToken" placeholder="e.g. UGR-20260824-X8K2" type="text"/>
+<!-- Example of error state (hidden by default, can be toggled with JS) -->
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-error hidden" id="errorIcon">error</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[12px] h-4" id="tokenHelp">
+<span class="text-error hidden" id="errorText">Invalid token format. Please check and try again.</span>
+</p>
+</div>
+<!-- Actions -->
+<button class="w-full h-12 bg-primary-container text-on-primary font-title-sm text-title-sm rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-2" type="button">
+                Continue
+                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</form>
+<div class="text-center mt-2">
+<a class="font-body-sm text-body-sm text-primary-container hover:text-primary transition-colors" href="#">I need help joining</a>
+</div>
+</div>
+</body></html>

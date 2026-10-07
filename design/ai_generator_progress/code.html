@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Generator - Progress | TestFlow Pro</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS & Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#e7eefe",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#464555",
+                        "on-primary-container": "#dad7ff",
+                        "on-secondary-fixed": "#141b2b",
+                        "surface": "#f9f9ff",
+                        "surface-dim": "#d3daea",
+                        "on-surface": "#151c27",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-bright": "#f9f9ff",
+                        "secondary": "#575e70",
+                        "surface-container-highest": "#dce2f3",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "tertiary": "#7e3000",
+                        "inverse-primary": "#c3c0ff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#777587",
+                        "primary-container": "#4f46e5",
+                        "secondary-fixed": "#dce2f7",
+                        "on-primary-fixed": "#0f0069",
+                        "outline-variant": "#c7c4d8",
+                        "secondary-container": "#d9dff5",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#c0c6db",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#ebf1ff",
+                        "on-secondary-container": "#5c6274",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2a313d",
+                        "surface-tint": "#4d44e3",
+                        "tertiary-container": "#a44100",
+                        "background": "#f9f9ff",
+                        "surface-container-high": "#e2e8f8",
+                        "on-tertiary-fixed": "#351000",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "primary": "#3525cd",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#ffd2be",
+                        "surface-variant": "#dce2f3",
+                        "primary-fixed": "#e2dfff",
+                        "on-background": "#151c27",
+                        "on-secondary-fixed-variant": "#404758"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "48px",
+                        "container-padding": "32px",
+                        "sidebar-collapsed": "72px",
+                        "gutter": "24px",
+                        "base": "4px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter", "sans-serif"],
+                        "title-sm": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "mono-label": ["JetBrains Mono", "monospace"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "display-lg-mobile": ["Inter", "sans-serif"],
+                        "label-caps": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "mono-label": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-ring {
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            80%, 100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface border-r border-outline-variant flex flex-col p-4 z-20">
+<!-- Brand -->
+<div class="flex items-center gap-3 px-2 mb-8 mt-2">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dataset</span>
+</div>
+<div>
+<h1 class="font-headline-md text-title-sm font-bold text-on-surface tracking-tight">TestFlow Pro</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest text-[10px]">HR Workspace</p>
+</div>
+</div>
+<!-- CTA -->
+<button class="w-full bg-primary-container text-on-primary rounded-lg py-2.5 px-4 font-body-sm text-body-sm font-medium mb-6 hover:bg-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            Create New Test
+        </button>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">quiz</span>
+<span class="font-body-sm text-body-sm">Tests</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">database</span>
+<span class="font-body-sm text-body-sm">Question Bank</span>
+</a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary-container text-on-secondary-container border-l-2 border-primary-container cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px] text-primary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-body-sm text-body-sm font-medium">AI Generator</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">insights</span>
+<span class="font-body-sm text-body-sm">Results</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+</div>
+<!-- Footer Links -->
+<div class="pt-4 mt-4 border-t border-outline-variant flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="font-body-sm text-body-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-body-sm text-body-sm">Log Out</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="h-16 fixed top-0 right-0 left-sidebar-width bg-surface-container-lowest border-b border-outline-variant z-10 flex justify-between items-center px-gutter">
+<div class="flex-1 max-w-md hidden md:block">
+<!-- Search intentionally omitted from this focused view as per functional minimalism, or kept as a disabled state. We'll keep it simple and clean. -->
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary-container rounded-full p-1">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary-container rounded-full p-1">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary-container rounded-full p-1">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden cursor-pointer shrink-0 ml-2">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a person with neutral lighting against a solid light gray background, suitable for a corporate HR profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnCQdFpf2ZF9w_b2u0ah3q8MROgR4_t2A4yVdTWqsjabtS72tSaSkSKu25OL-sMD-p0GWYE-wqVXmZUQcsFyjmRAfsQSGH8uIt_2Pes2eHJzbVRf02IdyO-f_x7eqmp7oWn6djwQrCzgCLfYPwBOARwbyYScCSnTGoSS1_4BG8dmjVNTqru-p_0DEh7EQPRaTWVXnaYTm28Wn2blE8FFghh8doN6FK0fHfwRCa6YviDziz3EDqjd7u"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-sidebar-width pt-16 h-full flex flex-col items-center justify-center p-8 bg-surface-bright">
+<!-- Focused Card Container -->
+<div class="w-full max-w-[600px] bg-surface-container-lowest border border-outline-variant rounded-xl p-10 shadow-[0_4px_12px_rgba(0,0,0,0.03)] flex flex-col relative overflow-hidden">
+<!-- Subtle top accent -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-container to-surface-tint"></div>
+<!-- Header -->
+<div class="text-center mb-10">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Generating your questions...</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">This may take a moment. Feel free to grab a coffee.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-12">
+<!-- Left: Metrics & Counter -->
+<div class="flex flex-col items-center md:items-start justify-center border-b md:border-b-0 md:border-r border-outline-variant pb-8 md:pb-0 md:pr-8">
+<div class="text-center md:text-left mb-6 w-full">
+<div class="flex items-baseline justify-center md:justify-start gap-1">
+<span class="font-display-lg text-display-lg text-primary tracking-tight" id="counter">12</span>
+<span class="font-headline-md text-headline-md text-outline">/ 20</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Questions generated</p>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[60%] transition-all duration-500 ease-out"></div>
+</div>
+</div>
+<!-- Right: Progress Steps -->
+<div class="flex flex-col gap-5">
+<!-- Step 1: Checked -->
+<div class="flex items-start gap-4">
+<div class="mt-0.5 flex shrink-0 items-center justify-center w-6 h-6 rounded-full bg-surface-container-lowest border border-primary-container">
+<span class="material-symbols-outlined text-[16px] text-primary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-medium text-on-surface">Uploading PDF</span>
+<span class="font-body-sm text-[12px] text-outline">HR_Policy_Manual.pdf (2.4MB)</span>
+</div>
+</div>
+<!-- Step 2: Checked -->
+<div class="flex items-start gap-4">
+<div class="mt-0.5 flex shrink-0 items-center justify-center w-6 h-6 rounded-full bg-surface-container-lowest border border-primary-container">
+<span class="material-symbols-outlined text-[16px] text-primary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-medium text-on-surface">Extracting content</span>
+<span class="font-body-sm text-[12px] text-outline">Parsed 45 pages of text</span>
+</div>
+</div>
+<!-- Step 3: Active/Loading -->
+<div class="flex items-start gap-4 relative">
+<div class="mt-0.5 flex shrink-0 items-center justify-center w-6 h-6 rounded-full border-2 border-primary relative">
+<!-- Spinner visual -->
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+<!-- Pulse effect -->
+<div class="absolute inset-0 rounded-full border border-primary pulse-ring"></div>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-medium text-primary">Analyzing material</span>
+<span class="font-body-sm text-[12px] text-primary/70">Identifying key concepts and taxonomy</span>
+</div>
+</div>
+<!-- Step 4: Pending -->
+<div class="flex items-start gap-4 opacity-50">
+<div class="mt-0.5 flex shrink-0 items-center justify-center w-6 h-6 rounded-full border border-outline"></div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Generating questions</span>
+</div>
+</div>
+<!-- Step 5: Pending -->
+<div class="flex items-start gap-4 opacity-50">
+<div class="mt-0.5 flex shrink-0 items-center justify-center w-6 h-6 rounded-full border border-outline"></div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Validating format</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Informational Message -->
+<div class="mt-10 bg-surface-container-low border border-outline-variant rounded-lg p-4 flex items-start gap-3">
+<span class="material-symbols-outlined text-outline mt-0.5 text-[20px]">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                    AI-generated questions should always be reviewed for accuracy and contextual relevance before being deployed in a live assessment environment.
+                </p>
+</div>
+<!-- Optional Actions -->
+<div class="mt-6 flex justify-center">
+<button class="font-body-sm text-body-sm text-primary hover:text-primary-fixed-dim transition-colors font-medium px-4 py-2">
+                    Cancel Generation
+                </button>
+</div>
+</div>
+</main>
+<!-- Simulated UI Logic -->
+<script>
+        // Simple script to simulate the counter ticking up slightly for realism in prototype
+        document.addEventListener("DOMContentLoaded", () => {
+            const counterEl = document.getElementById('counter');
+            let current = 12;
+            const target = 15; // Just simulate a few ticks
+            
+            setInterval(() => {
+                if(current < target) {
+                    current++;
+                    counterEl.textContent = current;
+                }
+            }, 3000);
+        });
+    </script>
+</body></html>

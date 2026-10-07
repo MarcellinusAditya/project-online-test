@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Test Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#e2dfff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#151c27",
+                        "surface-tint": "#4d44e3",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-container-low": "#f0f3ff",
+                        "primary-container": "#4f46e5",
+                        "inverse-on-surface": "#ebf1ff",
+                        "surface-bright": "#f9f9ff",
+                        "background": "#f9f9ff",
+                        "on-secondary-fixed-variant": "#404758",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#d9dff5",
+                        "tertiary-container": "#a44100",
+                        "on-primary-container": "#dad7ff",
+                        "tertiary": "#7e3000",
+                        "secondary": "#575e70",
+                        "inverse-primary": "#c3c0ff",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#2a313d",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "outline-variant": "#c7c4d8",
+                        "secondary-fixed": "#dce2f7",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-fixed-dim": "#c0c6db",
+                        "on-surface-variant": "#464555",
+                        "primary": "#3525cd",
+                        "on-tertiary-fixed": "#351000",
+                        "on-background": "#151c27",
+                        "surface-container-high": "#e2e8f8",
+                        "surface": "#f9f9ff",
+                        "outline": "#777587",
+                        "surface-dim": "#d3daea",
+                        "on-secondary-fixed": "#141b2b",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-variant": "#dce2f3",
+                        "surface-container": "#e7eefe",
+                        "surface-container-highest": "#dce2f3",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-secondary-container": "#5c6274"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "260px",
+                        "section-gap": "48px",
+                        "base": "4px",
+                        "gutter": "24px",
+                        "container-padding": "32px",
+                        "sidebar-collapsed": "72px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "body-sm": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "mono-label": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .focus-ring { outline: none; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5); border-color: #4f46e5; }
+    </style>
+</head>
+<body class="bg-[#FAFAFA] text-on-background min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="bg-surface-container-lowest border-b border-outline-variant h-16 flex justify-between items-center px-gutter shrink-0 z-20 shadow-[0_4px_12px_rgba(0,0,0,0.02)] relative">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="menu">menu</span>
+<div class="flex flex-col">
+<h1 class="font-title-sm text-title-sm font-bold text-on-surface">Mathematics Final Assessment</h1>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Question 5 of 20</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-lg border border-outline-variant/50">
+<span class="material-symbols-outlined text-primary-container" data-icon="timer">timer</span>
+<span class="font-mono-label text-mono-label font-medium text-primary-container">00:42:31</span>
+</div>
+<button class="bg-primary-container text-on-primary font-body-sm text-body-sm px-4 py-2 rounded-lg hover:bg-primary transition-colors focus:focus-ring">
+                Submit Test
+            </button>
+</div>
+<!-- Progress Bar (Absolute positioning at bottom of header) -->
+<div class="absolute bottom-0 left-0 h-[2px] bg-surface-container-high w-full">
+<div class="h-full bg-primary-container w-1/4 transition-all duration-300"></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden relative">
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto p-container-padding flex justify-center pb-32">
+<div class="w-full max-w-[800px] flex flex-col gap-6">
+<!-- Status Banner -->
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2 text-green-700 bg-green-50 px-3 py-1.5 rounded-full border border-green-200">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+<span class="font-body-sm text-body-sm font-medium">Answer saved</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-3 py-1 rounded-md">5 points</span>
+</div>
+<!-- Question Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-8 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+<h2 class="font-title-sm text-title-sm text-on-surface-variant mb-4">Question 5</h2>
+<p class="font-display-lg-mobile text-display-lg-mobile text-on-surface mb-8">
+                        What is the result of 12 × 8?
+                    </p>
+<!-- Answer Options -->
+<div class="flex flex-col gap-4">
+<label class="flex items-center p-4 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group">
+<input class="w-5 h-5 text-primary-container border-outline focus:ring-primary-container mr-4" name="q5" type="radio" value="A"/>
+<span class="font-body-md text-body-md text-on-surface">86</span>
+</label>
+<label class="flex items-center p-4 border-2 border-primary-container bg-surface-container-low rounded-lg cursor-pointer transition-colors relative">
+<input checked="" class="w-5 h-5 text-primary-container border-outline focus:ring-primary-container mr-4" name="q5" type="radio" value="B"/>
+<span class="font-body-md text-body-md text-on-surface font-medium">96</span>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-primary-container material-symbols-outlined" data-icon="check">check</span>
+</label>
+<label class="flex items-center p-4 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group">
+<input class="w-5 h-5 text-primary-container border-outline focus:ring-primary-container mr-4" name="q5" type="radio" value="C"/>
+<span class="font-body-md text-body-md text-on-surface">106</span>
+</label>
+<label class="flex items-center p-4 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group">
+<input class="w-5 h-5 text-primary-container border-outline focus:ring-primary-container mr-4" name="q5" type="radio" value="D"/>
+<span class="font-body-md text-body-md text-on-surface">116</span>
+</label>
+</div>
+</div>
+</div>
+</main>
+<!-- Collapsible Side Panel (Question Navigator) -->
+<aside class="w-[320px] bg-surface-container-lowest border-l border-outline-variant h-full hidden lg:flex flex-col shrink-0 shadow-[-4px_0_12px_rgba(0,0,0,0.02)]">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<h3 class="font-title-sm text-title-sm font-semibold text-on-surface">Question Navigator</h3>
+<button aria-label="Close navigator" class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="p-6 overflow-y-auto">
+<div class="flex gap-4 mb-6 text-sm">
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-primary-container"></div> Current</div>
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center"><span class="block w-1.5 h-1.5 bg-outline rounded-full"></span></div> Answered</div>
+<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full border border-outline-variant"></div> Unanswered</div>
+</div>
+<div class="grid grid-cols-4 gap-3">
+<!-- Nav items -->
+<!-- Answered -->
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-low flex items-center justify-center font-mono-label text-mono-label text-on-surface-variant hover:border-primary-container transition-colors relative">
+                        1
+                        <span class="absolute top-1 right-1 w-1.5 h-1.5 bg-outline rounded-full"></span>
+</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-low flex items-center justify-center font-mono-label text-mono-label text-on-surface-variant hover:border-primary-container transition-colors relative">
+                        2
+                        <span class="absolute top-1 right-1 w-1.5 h-1.5 bg-outline rounded-full"></span>
+</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-low flex items-center justify-center font-mono-label text-mono-label text-on-surface-variant hover:border-primary-container transition-colors relative">
+                        3
+                        <span class="absolute top-1 right-1 w-1.5 h-1.5 bg-outline rounded-full"></span>
+</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-low flex items-center justify-center font-mono-label text-mono-label text-on-surface-variant hover:border-primary-container transition-colors relative">
+                        4
+                        <span class="absolute top-1 right-1 w-1.5 h-1.5 bg-outline rounded-full"></span>
+</button>
+<!-- Current -->
+<button class="w-full aspect-square rounded-lg bg-primary-container text-on-primary flex items-center justify-center font-mono-label text-mono-label font-bold shadow-md ring-2 ring-primary-container ring-offset-2 ring-offset-surface-container-lowest">
+                        5
+                    </button>
+<!-- Unanswered -->
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">6</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">7</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">8</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">9</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">10</button>
+<!-- More unanswered placeholders to complete grid -->
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">11</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">12</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">13</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">14</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">15</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">16</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">17</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">18</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">19</button>
+<button class="w-full aspect-square rounded-lg border border-outline-variant bg-surface-container-lowest flex items-center justify-center font-mono-label text-mono-label text-on-surface hover:border-primary-container hover:bg-surface transition-colors">20</button>
+</div>
+</div>
+</aside>
+<!-- Bottom Action Bar (Fixed within main area context) -->
+<div class="absolute bottom-0 left-0 right-[320px] bg-surface-container-lowest border-t border-outline-variant p-4 flex justify-between items-center shadow-[0_-4px_12px_rgba(0,0,0,0.02)] z-10 lg:right-[320px] right-0">
+<button class="flex items-center gap-2 bg-surface-container-lowest border border-outline-variant text-on-surface font-body-sm text-body-sm px-6 py-2.5 rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_left">chevron_left</span>
+                Previous
+            </button>
+<button class="flex items-center gap-2 bg-primary-container text-on-primary font-body-sm text-body-sm px-6 py-2.5 rounded-lg hover:bg-primary transition-colors focus:focus-ring shadow-sm">
+                Next
+                <span class="material-symbols-outlined text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</body></html>

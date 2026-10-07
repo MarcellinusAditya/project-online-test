@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Test Builder Workspace - Precision Assessment Logic</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f9f9ff",
+                        "surface-container-low": "#f0f3ff",
+                        "primary-container": "#4f46e5",
+                        "on-secondary-container": "#5c6274",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#c3c0ff",
+                        "secondary-fixed-dim": "#c0c6db",
+                        "secondary-fixed": "#dce2f7",
+                        "outline-variant": "#c7c4d8",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdbcc",
+                        "outline": "#777587",
+                        "primary-fixed": "#e2dfff",
+                        "on-background": "#151c27",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#464555",
+                        "surface-variant": "#dce2f3",
+                        "on-surface": "#151c27",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#404758",
+                        "tertiary": "#7e3000",
+                        "on-secondary-fixed": "#141b2b",
+                        "on-primary-container": "#dad7ff",
+                        "primary": "#3525cd",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-container": "#d9dff5",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "surface-container": "#e7eefe",
+                        "secondary": "#575e70",
+                        "surface-dim": "#d3daea",
+                        "inverse-on-surface": "#ebf1ff",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary-fixed": "#351000",
+                        "tertiary-container": "#a44100",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2a313d",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "surface-container-high": "#e2e8f8",
+                        "background": "#f9f9ff",
+                        "surface-tint": "#4d44e3",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#dce2f3",
+                        "primary-fixed-dim": "#c3c0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "sidebar-width": "260px",
+                        "section-gap": "48px",
+                        "container-padding": "32px",
+                        "sidebar-collapsed": "72px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "mono-label": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "mono-label": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for inner panels */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #dce2f3;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface h-screen overflow-hidden font-body-md flex">
+<!-- JSON Component: SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen z-40 flex flex-col bg-surface docked left-0 w-sidebar-width transition-all duration-300 border-r border-outline-variant">
+<!-- Header -->
+<div class="flex items-center gap-4 px-6 py-5 border-b border-outline-variant">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary font-bold">T</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">TestPro SaaS</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Admin Console</p>
+</div>
+</div>
+<!-- Main Nav -->
+<div class="flex-1 overflow-y-auto py-4 px-2 space-y-1">
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded scale-98 active:scale-95 transition-transform font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<!-- Active (Matches Intent: Test Builder) -->
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-primary border-l-2 border-primary rounded scale-98 active:scale-95 transition-transform font-body-sm text-body-sm font-semibold" href="#">
+<span class="material-symbols-outlined icon-fill">quiz</span>
+                Tests
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded scale-98 active:scale-95 transition-transform font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined">database</span>
+                Question Bank
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded scale-98 active:scale-95 transition-transform font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined">psychology</span>
+                AI Generator
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded scale-98 active:scale-95 transition-transform font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Results
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded scale-98 active:scale-95 transition-transform font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+<!-- Footer Nav -->
+<div class="p-2 border-t border-outline-variant mt-auto">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined">help</span>
+                Help Center
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Log Out
+            </a>
+</div>
+</nav>
+<!-- Main Application Area -->
+<div class="flex-1 ml-[260px] flex flex-col h-screen overflow-hidden">
+<!-- JSON Component: TopAppBar -->
+<header class="fixed top-0 right-0 left-[260px] z-30 h-16 flex justify-between items-center px-gutter bg-surface/80 backdrop-blur-md border-b border-outline-variant flat no shadows opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-center gap-4">
+<!-- Search placeholder per JSON (on_left) -->
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container border border-outline-variant rounded-full font-body-sm text-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<button class="bg-primary-container text-on-primary-container font-title-sm text-title-sm px-4 py-2 rounded shadow-sm hover:bg-primary transition-colors ml-2">
+                     Create New Test
+                 </button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant ml-2">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of an administrator in a well-lit office setting, modern bright lighting, sharp focus, neutral background, high resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVQK6bfGAHJtQRuR4129gsFMh0m-kS8oxEB7jleo-3DcG3Ioumx7p9Ft8wi1i4C0Vzr2T48TF9RMGWFq3srAi6EkIzfJLvZgRScmqAOdHdeSU-J2q42qFFo8Z48-wDCIiQUhWb-Ld_TnEy7RaCRxFhG9C0-ZilrEt-hgTJAnggRIUgc40qoY05DAI2h3C29rB1d-URVQq2f_A_NV3DbNZ3FBjmFh-xsvwhI9D6-ymyw9V9Ze0soPTp"/>
+</div>
+</div>
+</header>
+<!-- Workspace Context Header (Below Global Nav) -->
+<div class="mt-16 bg-surface border-b border-outline-variant px-gutter py-3 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-4">
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div>
+<div class="flex items-center gap-3">
+<h2 class="font-headline-md text-[20px] font-semibold text-on-surface">Mathematics Final Assessment</h2>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps border border-outline-variant">Draft</span>
+<span class="px-2 py-0.5 rounded bg-secondary-container text-primary font-label-caps text-label-caps">20 Questions</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-[14px]">cloud_done</span>
+<span class="font-body-sm text-[12px]">Saved just now</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded border border-outline-variant text-on-surface font-body-sm hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+                    Preview
+                </button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+</div>
+<!-- 3-Column Workspace -->
+<div class="flex-1 flex overflow-hidden bg-surface-container-low">
+<!-- Column 1: Question Navigation (Left) -->
+<aside class="w-[280px] bg-surface border-r border-outline-variant flex flex-col shrink-0">
+<div class="p-4 border-b border-outline-variant flex items-center justify-between bg-surface-bright">
+<h3 class="font-title-sm text-title-sm text-on-surface">Questions</h3>
+<button class="flex items-center gap-1 text-primary hover:text-primary-fixed-dim transition-colors font-body-sm font-medium">
+<span class="material-symbols-outlined text-[18px]">add</span> Add
+                    </button>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1">
+<!-- Active Question -->
+<div class="group flex items-center gap-2 p-2 rounded bg-surface-container border border-primary cursor-pointer">
+<span class="material-symbols-outlined text-outline cursor-grab hover:text-on-surface text-[18px]">drag_indicator</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant w-5">1.</span>
+<div class="flex-1 flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-primary text-[16px]">radio_button_checked</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate font-medium">What is the capital...</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[16px]" title="Complete">check_circle</span>
+</div>
+<!-- Incomplete Question -->
+<div class="group flex items-center gap-2 p-2 rounded hover:bg-surface-container border border-transparent cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-outline opacity-0 group-hover:opacity-100 cursor-grab hover:text-on-surface text-[18px] transition-opacity">drag_indicator</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant w-5">2.</span>
+<div class="flex-1 flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">subject</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Explain the process of...</span>
+</div>
+<span class="material-symbols-outlined text-tertiary-container text-[16px]" title="Incomplete">error</span>
+</div>
+<!-- AI Generated Question -->
+<div class="group flex items-center gap-2 p-2 rounded hover:bg-surface-container border border-transparent cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-outline opacity-0 group-hover:opacity-100 cursor-grab hover:text-on-surface text-[18px] transition-opacity">drag_indicator</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant w-5">3.</span>
+<div class="flex-1 flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">radio_button_checked</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Solve for x: 2x + 5 = 15</span>
+</div>
+<!-- AI Badge -->
+<span class="w-2 h-2 rounded-full bg-[#8b5cf6]" title="AI Generated"></span>
+</div>
+<!-- Dummy items to show list length -->
+<div class="group flex items-center gap-2 p-2 rounded hover:bg-surface-container border border-transparent cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-outline opacity-0 group-hover:opacity-100 cursor-grab text-[18px]">drag_indicator</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant w-5">4.</span>
+<div class="flex-1 flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">check_box</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Select all prime numbers</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[16px]">check_circle</span>
+</div>
+</div>
+</aside>
+<!-- Column 2: Active Editor (Center) -->
+<main class="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-8 flex justify-center">
+<div class="w-full max-w-[800px] flex flex-col gap-6">
+<!-- Editor Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0_2px_8px_rgba(0,0,0,0.02)] overflow-hidden">
+<!-- Card Header -->
+<div class="px-6 py-4 border-b border-outline-variant flex flex-wrap items-center justify-between gap-4 bg-surface-bright">
+<div class="flex items-center gap-3">
+<h3 class="font-title-sm text-[18px] font-semibold text-on-surface">Question 1</h3>
+<span class="px-2 py-1 rounded-md bg-secondary-container text-on-secondary-container font-label-caps text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">radio_button_checked</span>
+                                    MULTIPLE CHOICE
+                                </span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<button class="p-1.5 rounded hover:bg-surface-container transition-colors" title="Duplicate">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="p-1.5 rounded hover:bg-error-container hover:text-error transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Card Body -->
+<div class="p-6 space-y-8">
+<!-- Question Text -->
+<div>
+<label class="block font-body-sm font-medium text-on-surface mb-2">Question Text</label>
+<textarea class="w-full bg-surface-bright border border-outline-variant rounded-lg p-4 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none transition-all placeholder:text-outline" placeholder="Enter your question here..." rows="3">What is the capital city of Indonesia?</textarea>
+</div>
+<!-- Answers Section -->
+<div>
+<div class="flex items-center justify-between mb-3">
+<label class="block font-body-sm font-medium text-on-surface">Answer Options</label>
+<span class="font-body-sm text-on-surface-variant text-[13px]">Select the correct answer</span>
+</div>
+<div class="space-y-3">
+<!-- Option 1 (Correct) -->
+<div class="group flex items-start gap-3 p-3 rounded-lg border-2 border-primary bg-primary/5 transition-all">
+<div class="mt-1 cursor-grab text-outline hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">drag_indicator</span></div>
+<div class="mt-1">
+<input checked="" class="w-5 h-5 text-primary border-outline-variant focus:ring-primary cursor-pointer" name="q1_answer" type="radio"/>
+</div>
+<div class="flex-1">
+<input class="w-full bg-transparent border-none p-0 font-body-md text-on-surface focus:ring-0" type="text" value="Jakarta"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-primary text-on-primary font-label-caps text-[10px] rounded-full">CORRECT</span>
+<button class="text-outline hover:text-error opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+</div>
+<!-- Option 2 -->
+<div class="group flex items-start gap-3 p-3 rounded-lg border border-outline-variant hover:border-outline bg-surface-bright transition-all">
+<div class="mt-1 cursor-grab text-outline hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">drag_indicator</span></div>
+<div class="mt-1">
+<input class="w-5 h-5 text-primary border-outline-variant focus:ring-primary cursor-pointer" name="q1_answer" type="radio"/>
+</div>
+<div class="flex-1">
+<input class="w-full bg-transparent border-none p-0 font-body-md text-on-surface focus:ring-0" type="text" value="Bandung"/>
+</div>
+<button class="text-outline hover:text-error opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+<!-- Option 3 -->
+<div class="group flex items-start gap-3 p-3 rounded-lg border border-outline-variant hover:border-outline bg-surface-bright transition-all">
+<div class="mt-1 cursor-grab text-outline hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">drag_indicator</span></div>
+<div class="mt-1">
+<input class="w-5 h-5 text-primary border-outline-variant focus:ring-primary cursor-pointer" name="q1_answer" type="radio"/>
+</div>
+<div class="flex-1">
+<input class="w-full bg-transparent border-none p-0 font-body-md text-on-surface focus:ring-0" type="text" value="Surabaya"/>
+</div>
+<button class="text-outline hover:text-error opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+<!-- Option 4 -->
+<div class="group flex items-start gap-3 p-3 rounded-lg border border-outline-variant hover:border-outline bg-surface-bright transition-all">
+<div class="mt-1 cursor-grab text-outline hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">drag_indicator</span></div>
+<div class="mt-1">
+<input class="w-5 h-5 text-primary border-outline-variant focus:ring-primary cursor-pointer" name="q1_answer" type="radio"/>
+</div>
+<div class="flex-1">
+<input class="w-full bg-transparent border-none p-0 font-body-md text-on-surface focus:ring-0" type="text" value="Medan"/>
+</div>
+<button class="text-outline hover:text-error opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+</div>
+<button class="mt-3 flex items-center gap-1 text-primary text-sm font-medium hover:underline">
+<span class="material-symbols-outlined text-[18px]">add</span> Add Option
+                                </button>
+</div>
+<!-- Divider -->
+<hr class="border-outline-variant"/>
+<!-- Configuration -->
+<div class="grid grid-cols-2 gap-6">
+<div>
+<label class="block font-body-sm font-medium text-on-surface mb-2">Points</label>
+<input class="w-full bg-surface-bright border border-outline-variant rounded-lg px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" type="number" value="5"/>
+</div>
+<div>
+<label class="block font-body-sm font-medium text-on-surface mb-2">Difficulty</label>
+<select class="w-full bg-surface-bright border border-outline-variant rounded-lg px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+<option>Easy</option>
+<option selected="">Medium</option>
+<option>Hard</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block font-body-sm font-medium text-on-surface mb-2">Explanation (Optional)</label>
+<textarea class="w-full bg-surface-bright border border-outline-variant rounded-lg p-3 font-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none transition-all placeholder:text-outline" placeholder="Explain why the answer is correct..." rows="2"></textarea>
+<p class="text-[12px] text-on-surface-variant mt-1">Shown to students after test completion if enabled in settings.</p>
+</div>
+</div>
+</div>
+<!-- Bottom spacing -->
+<div class="h-8"></div>
+</div>
+</main>
+<!-- Column 3: Question Bank (Right) -->
+<aside class="w-[320px] bg-surface border-l border-outline-variant flex flex-col shrink-0">
+<div class="p-4 border-b border-outline-variant bg-surface-bright">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-3">Question Bank</h3>
+<div class="relative mb-3">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface-container-low border border-outline-variant rounded-md font-body-sm text-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Search questions..." type="text"/>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1">
+<button class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface font-body-sm text-[12px] whitespace-nowrap border border-outline-variant">All</button>
+<button class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant font-body-sm text-[12px] whitespace-nowrap hover:bg-surface-container-high transition-colors">MCQ</button>
+<button class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant font-body-sm text-[12px] whitespace-nowrap hover:bg-surface-container-high transition-colors">Essay</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-3 bg-surface-container-low">
+<!-- Bank Card 1 -->
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant hover:border-primary/50 transition-colors group cursor-pointer shadow-sm">
+<div class="flex items-start justify-between gap-2 mb-2">
+<p class="font-body-sm text-on-surface line-clamp-2 leading-tight">Calculate the derivative of f(x) = x^3 - 4x + 7.</p>
+<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors shrink-0">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-caps text-[10px]">ESSAY</span>
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[10px]">HARD</span>
+</div>
+</div>
+<!-- Bank Card 2 -->
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant hover:border-primary/50 transition-colors group cursor-pointer shadow-sm">
+<div class="flex items-start justify-between gap-2 mb-2">
+<p class="font-body-sm text-on-surface line-clamp-2 leading-tight">Which of the following is NOT a property of a parallelogram?</p>
+<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors shrink-0">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-caps text-[10px]">MCQ</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-caps text-[10px]">EASY</span>
+</div>
+</div>
+<!-- Bank Card 3 -->
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant hover:border-primary/50 transition-colors group cursor-pointer shadow-sm">
+<div class="flex items-start justify-between gap-2 mb-2">
+<p class="font-body-sm text-on-surface line-clamp-2 leading-tight">Find the area of a circle with a radius of 5cm. (Use π = 3.14)</p>
+<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors shrink-0">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-caps text-[10px]">MCQ</span>
+<span class="px-1.5 py-0.5 rounded bg-[#fef08a] text-[#854d0e] font-label-caps text-[10px]">MEDIUM</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Sticky Footer -->
+<footer class="bg-surface border-t border-outline-variant px-gutter py-3 flex items-center justify-between shrink-0 shadow-[0_-2px_10px_rgba(0,0,0,0.02)] z-10">
+<div class="flex items-center gap-6 text-on-surface-variant font-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">format_list_numbered</span>
+<span class="font-medium text-on-surface">20</span> Questions
+                </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">workspace_premium</span>
+<span class="font-medium text-on-surface">100</span> Total Points
+                </div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded border border-transparent text-on-surface font-title-sm text-[14px] hover:bg-surface-container transition-colors">
+                    Save Draft
+                </button>
+<button class="px-6 py-2 rounded bg-primary-container text-on-primary-container font-title-sm text-[14px] shadow-sm hover:bg-primary transition-colors flex items-center gap-2">
+                    Publish Test <span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</footer>
+</div>
+</body></html>

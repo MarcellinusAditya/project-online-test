@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Test Overview - TestPro SaaS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#dce2f3",
+                    "on-surface-variant": "#464555",
+                    "outline-variant": "#c7c4d8",
+                    "primary": "#3525cd",
+                    "secondary-fixed": "#dce2f7",
+                    "primary-container": "#4f46e5",
+                    "secondary-fixed-dim": "#c0c6db",
+                    "tertiary-container": "#a44100",
+                    "error": "#ba1a1a",
+                    "secondary": "#575e70",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#141b2b",
+                    "surface": "#f9f9ff",
+                    "surface-dim": "#d3daea",
+                    "on-tertiary-fixed-variant": "#7b2f00",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "surface-bright": "#f9f9ff",
+                    "on-background": "#151c27",
+                    "on-secondary-fixed-variant": "#404758",
+                    "inverse-on-surface": "#ebf1ff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e2e8f8",
+                    "surface-tint": "#4d44e3",
+                    "on-surface": "#151c27",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#351000",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#ffd2be",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2a313d",
+                    "surface-container-highest": "#dce2f3",
+                    "background": "#f9f9ff",
+                    "tertiary-fixed-dim": "#ffb695",
+                    "on-secondary-container": "#5c6274",
+                    "primary-fixed": "#e2dfff",
+                    "surface-container": "#e7eefe",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#0f0069",
+                    "tertiary": "#7e3000",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "inverse-primary": "#c3c0ff",
+                    "on-primary-container": "#dad7ff",
+                    "outline": "#777587",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f0f3ff",
+                    "secondary-container": "#d9dff5",
+                    "tertiary-fixed": "#ffdbcc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "base": "4px",
+                    "container-padding": "32px",
+                    "sidebar-width": "260px",
+                    "section-gap": "48px",
+                    "sidebar-collapsed": "72px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "label-caps": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "mono-label": [
+                            "JetBrains Mono"
+                    ],
+                    "display-lg-mobile": [
+                            "Inter"
+                    ],
+                    "title-sm": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "36px",
+                            {
+                                    "lineHeight": "44px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "mono-label": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "34px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "title-sm": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md min-h-screen">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen z-40 flex flex-col bg-surface border-r border-outline-variant w-sidebar-width transition-all duration-300">
+<div class="p-gutter border-b border-outline-variant">
+<h1 class="font-headline-md text-headline-md text-primary">TestPro SaaS</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Admin Console</p>
+</div>
+<ul class="flex flex-col flex-grow py-4 gap-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-primary border-l-2 border-primary scale-98 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="font-body-sm text-body-sm">Tests</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-sm text-body-sm">Question Bank</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-body-sm text-body-sm">AI Generator</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-sm text-body-sm">Results</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+</li>
+</ul>
+<div class="p-4 border-t border-outline-variant">
+<ul class="flex flex-col gap-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-sm text-body-sm">Help Center</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-sm text-body-sm">Log Out</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-sidebar-width z-30 h-16 flex justify-between items-center px-gutter bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<div class="flex-grow"></div> <!-- Placeholder for search if needed -->
+<div class="flex items-center gap-4">
+<button class="bg-primary-container text-on-primary font-body-sm text-body-sm px-4 py-2 rounded-DEFAULT opacity-80 hover:opacity-100 transition-opacity">Create New Test</button>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">help_outline</span>
+</div>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A clean, minimalist 3D rendering of a generic user avatar or profile icon in light gray tones on a soft white background, fitting a modern professional dashboard aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_8uC25PO90OVHmhGOAuxSG46l1Ys1hpZRjyz2lNeWILbHAF4IW9hChV3ThTzQu5pKd1VaS7GdG-ZCEJcq2KZZKxOHWEAmYgZD-FzLXElr8uT94Z0CKcECMVoE_Eyntdp-m-BSZwH3r1eFgYV52MGfGflXkfPtkKi-XOSHXr_Xtpn8q24ywtrFkGelCLw0NDJ1vdBnVC6nY77srRSGwsNljHrdlncJcJT6QJSrgC-7Sc10bQoe0-LG"/>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-sidebar-width pt-16 p-container-padding min-h-screen bg-background">
+<div class="max-w-[1200px] mx-auto">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-section-gap pb-4 border-b border-outline-variant">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface mb-2">Q3 Financial Compliance Exam</h2>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-caps font-label-caps bg-green-100 text-green-800 uppercase tracking-wider">
+                            Published
+                        </span>
+<span class="text-on-surface-variant font-body-sm text-body-sm ml-2">Last updated 2 hours ago</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface text-on-surface font-body-sm text-body-sm px-4 py-2 rounded-DEFAULT border border-outline-variant hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">visibility</span> Preview
+                    </button>
+<button class="bg-surface text-on-surface font-body-sm text-body-sm px-4 py-2 rounded-DEFAULT border border-outline-variant hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                    </button>
+<button class="bg-primary-container text-on-primary font-body-sm text-body-sm px-4 py-2 rounded-DEFAULT opacity-50 cursor-not-allowed flex items-center gap-2" disabled="">
+                        Publish
+                    </button>
+</div>
+</div>
+<!-- Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-section-gap">
+<!-- Summary Cards -->
+<div class="bg-surface border border-outline-variant rounded-lg p-6 flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Questions</span>
+<div class="flex items-center justify-between">
+<span class="font-display-lg text-display-lg">20</span>
+<span class="material-symbols-outlined text-outline">format_list_numbered</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-6 flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Duration</span>
+<div class="flex items-center justify-between">
+<span class="font-display-lg text-display-lg">60<span class="text-title-sm">m</span></span>
+<span class="material-symbols-outlined text-outline">timer</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-6 flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Participants</span>
+<div class="flex items-center justify-between">
+<span class="font-display-lg text-display-lg">128</span>
+<span class="material-symbols-outlined text-outline">group</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-6 flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Schedule</span>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md">Aug 24</span>
+<span class="material-symbols-outlined text-outline">event</span>
+</div>
+</div>
+<!-- Test Description (Spans 2 cols) -->
+<div class="md:col-span-2 bg-surface border border-outline-variant rounded-lg p-6">
+<h3 class="font-title-sm text-title-sm mb-4 border-b border-outline-variant pb-2">Test Description</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">
+                        This mandatory compliance exam covers the updated Q3 regulatory frameworks for internal auditing procedures. Participants are expected to demonstrate understanding of the new reporting guidelines and risk assessment protocols introduced in the latest fiscal quarter.
+                    </p>
+<div class="bg-surface-container-low p-4 rounded-DEFAULT border border-outline-variant">
+<p class="font-body-sm text-body-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">info</span>
+                            Passing score required: 80% (16/20 correct)
+                        </p>
+</div>
+</div>
+<!-- Access Information (Spans 2 cols) -->
+<div class="md:col-span-2 bg-surface border border-outline-variant rounded-lg p-6">
+<h3 class="font-title-sm text-title-sm mb-4 border-b border-outline-variant pb-2">Access Information</h3>
+<div class="flex flex-col gap-4">
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-1">Test Token</label>
+<div class="flex items-center">
+<code class="font-mono-label text-mono-label bg-surface-container-low border border-outline-variant px-3 py-2 rounded-l-DEFAULT flex-grow text-on-surface">UGR-20260824-X8K2</code>
+<button class="bg-surface border border-l-0 border-outline-variant px-3 py-2 rounded-r-DEFAULT text-on-surface-variant hover:text-primary transition-colors" title="Copy Token">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-1">Test URL</label>
+<div class="flex items-center">
+<code class="font-mono-label text-mono-label bg-surface-container-low border border-outline-variant px-3 py-2 rounded-l-DEFAULT flex-grow text-on-surface">test.example.com/join</code>
+<button class="bg-surface border border-l-0 border-outline-variant px-3 py-2 rounded-r-DEFAULT text-on-surface-variant hover:text-primary transition-colors" title="Copy URL">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Question Summary -->
+<div class="md:col-span-2 bg-surface border border-outline-variant rounded-lg overflow-hidden">
+<div class="p-6 border-b border-outline-variant bg-surface">
+<h3 class="font-title-sm text-title-sm">Question Summary</h3>
+</div>
+<div class="p-0">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="py-3 px-6 font-label-caps text-label-caps text-on-surface-variant uppercase">Type</th>
+<th class="py-3 px-6 font-label-caps text-label-caps text-on-surface-variant uppercase">Count</th>
+<th class="py-3 px-6 font-label-caps text-label-caps text-on-surface-variant uppercase">Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
+<td class="py-3 px-6 font-body-sm text-body-sm">Multiple Choice</td>
+<td class="py-3 px-6 font-body-sm text-body-sm">15</td>
+<td class="py-3 px-6 font-body-sm text-body-sm">1 pt</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
+<td class="py-3 px-6 font-body-sm text-body-sm">True/False</td>
+<td class="py-3 px-6 font-body-sm text-body-sm">3</td>
+<td class="py-3 px-6 font-body-sm text-body-sm">1 pt</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3 px-6 font-body-sm text-body-sm">Essay / Free Text</td>
+<td class="py-3 px-6 font-body-sm text-body-sm">2</td>
+<td class="py-3 px-6 font-body-sm text-body-sm">5 pts</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Test Settings -->
+<div class="md:col-span-2 bg-surface border border-outline-variant rounded-lg p-6">
+<h3 class="font-title-sm text-title-sm mb-4 border-b border-outline-variant pb-2">Test Settings</h3>
+<ul class="space-y-3">
+<li class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-on-surface-variant">Randomize Questions</span>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</li>
+<li class="flex items-center justify-between font-body-sm text-body-sm border-t border-outline-variant pt-3">
+<span class="text-on-surface-variant">Allow Backtracking</span>
+<span class="material-symbols-outlined text-outline">cancel</span>
+</li>
+<li class="flex items-center justify-between font-body-sm text-body-sm border-t border-outline-variant pt-3">
+<span class="text-on-surface-variant">Show Results Immediately</span>
+<span class="material-symbols-outlined text-outline">cancel</span>
+</li>
+<li class="flex items-center justify-between font-body-sm text-body-sm border-t border-outline-variant pt-3">
+<span class="text-on-surface-variant">Proctoring Enabled</span>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+</body></html>
