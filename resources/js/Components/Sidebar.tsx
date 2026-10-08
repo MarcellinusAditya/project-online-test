@@ -1,5 +1,10 @@
 import { Link, usePage } from '@inertiajs/react';
 
+interface SidebarProps {
+    isOpen?: boolean;
+    onClose?: () => void;
+}
+
 const navigation = [
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
     { name: 'Tests', href: 'tests.index', icon: 'quiz' },
@@ -13,7 +18,7 @@ const bottomNavigation = [
     { name: 'Help Center', href: '#', icon: 'help' },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     const { url } = usePage();
 
     const isActive = (href: string) => {
@@ -26,9 +31,9 @@ export default function Sidebar() {
         return false;
     };
 
-    return (
-        <aside className="bg-surface border-r border-outline-variant w-sidebar-width transition-all duration-300 fixed left-0 top-0 h-screen z-40 flex flex-col hidden md:flex">
-            <div className="p-gutter border-b border-outline-variant">
+    const sidebarContent = (
+        <div className="flex flex-col h-full bg-surface border-r border-outline-variant w-sidebar-width">
+            <div className="p-gutter border-b border-outline-variant flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shrink-0">
                         <span className="material-symbols-outlined text-lg">analytics</span>
@@ -38,6 +43,15 @@ export default function Sidebar() {
                         <p className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Admin Console</p>
                     </div>
                 </div>
+                {onClose && (
+                    <button
+                        onClick={onClose}
+                        className="md:hidden text-on-surface-variant hover:text-on-surface p-1 rounded-lg"
+                        aria-label="Close menu"
+                    >
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
+                )}
             </div>
 
             <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto text-body-sm">
@@ -47,6 +61,7 @@ export default function Sidebar() {
                         <Link
                             key={item.name}
                             href={item.href === '#' ? '#' : route(item.href)}
+                            onClick={onClose}
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                                 active
                                     ? 'bg-secondary-container text-primary border-l-2 border-primary scale-98'
@@ -65,6 +80,7 @@ export default function Sidebar() {
                     <Link
                         key={item.name}
                         href={item.href}
+                        onClick={onClose}
                         className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors"
                     >
                         <span className="material-symbols-outlined">{item.icon}</span>
@@ -81,6 +97,28 @@ export default function Sidebar() {
                     <span>Log Out</span>
                 </Link>
             </div>
-        </aside>
+        </div>
+    );
+
+    return (
+        <>
+            {/* Desktop fixed sidebar */}
+            <aside className="fixed left-0 top-0 h-screen z-40 hidden md:block">
+                {sidebarContent}
+            </aside>
+
+            {/* Mobile drawer with backdrop */}
+            {isOpen && (
+                <div className="fixed inset-0 z-50 md:hidden flex">
+                    <div
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+                        onClick={onClose}
+                    />
+                    <div className="relative z-10 w-sidebar-width max-w-[85vw] h-full shadow-2xl animate-in slide-in-from-left duration-200">
+                        {sidebarContent}
+                    </div>
+                </div>
+            )}
+        </>
     );
 }

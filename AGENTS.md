@@ -38,6 +38,10 @@ This is a Laravel application with a React/Vite frontend.
 - Avoid unnecessary refactoring.
 - Keep changes focused on the requested task.
 
+### Frontend & Responsive Design
+- Every new UI page or component MUST be fully responsive (mobile, tablet, desktop, starting from 360px width).
+- Always include mobile navigation (hamburger menu / responsive drawers) and responsive table scrolling (`overflow-x-auto`).
+
 ### Testing
 After modifying backend code:
 - Run relevant tests first.

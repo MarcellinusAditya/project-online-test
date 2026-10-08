@@ -29,8 +29,8 @@ export default function TestsIndex({ tests }: TestsIndexProps) {
         <AuthenticatedLayout
             header={
                 <div>
-                    <h2 className="text-display-lg text-on-surface mb-2">Tests</h2>
-                    <p className="text-body-md text-on-surface-variant max-w-2xl">
+                    <h2 className="text-headline-md md:text-display-lg text-on-surface mb-1 md:mb-2">Tests</h2>
+                    <p className="text-body-sm md:text-body-md text-on-surface-variant max-w-2xl">
                         Create, manage, and monitor your online tests across all departments and cohorts.
                     </p>
                 </div>
