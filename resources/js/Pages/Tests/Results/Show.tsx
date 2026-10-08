@@ -40,13 +40,30 @@ interface AttemptDetail {
     submitted_at: string | null;
 }
 
+interface AttemptEvent {
+    id: number;
+    event_type: string;
+    label: string;
+    event_data: Record<string, unknown> | null;
+    created_at: string;
+}
+
 interface ShowProps {
     test: Test;
     attempt: AttemptDetail;
     answers: AnswerDetail[];
+    events: AttemptEvent[];
 }
 
-export default function ResultsShow({ test, attempt, answers }: ShowProps) {
+const suspiciousEvents = new Set([
+    'fullscreen_exited',
+    'tab_hidden',
+    'window_blur',
+    'warning_issued',
+]);
+
+export default function ResultsShow({ test, attempt, answers, events = [] }: ShowProps) {
+    const suspiciousCount = events.filter((e) => suspiciousEvents.has(e.event_type)).length;
     const { data, setData, post, processing, errors } = useForm({
         grades: answers.map((a) => ({
             answer_id: a.id,
@@ -113,6 +130,12 @@ export default function ResultsShow({ test, attempt, answers }: ShowProps) {
                         <p className="text-display-lg-mobile font-bold text-primary">{attempt.score ?? 0}%</p>
                     </div>
                     <div className="text-center border-l border-outline-variant/60 pl-6">
+                        <p className="text-xs text-on-surface-variant uppercase">Warnings</p>
+                        <p className={`text-title-sm font-bold ${suspiciousCount > 0 ? 'text-error' : 'text-emerald-600'}`}>
+                            {suspiciousCount}
+                        </p>
+                    </div>
+                    <div className="text-center border-l border-outline-variant/60 pl-6">
                         <p className="text-xs text-on-surface-variant uppercase">Correct / Wrong</p>
                         <p className="text-title-sm font-semibold">
                             <span className="text-emerald-600">{attempt.total_correct ?? 0}</span> /{' '}
@@ -123,6 +146,55 @@ export default function ResultsShow({ test, attempt, answers }: ShowProps) {
             </div>
 
             {/* Form Grading */}
+            {events.length > 0 && (
+                <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm mb-6">
+                    <h3 className="font-bold text-title-sm text-on-surface mb-1 flex items-center gap-2">
+                        <span className="material-symbols-outlined text-primary">monitoring</span>
+                        Activity Timeline
+                    </h3>
+                    <p className="text-body-sm text-on-surface-variant mb-4">
+                        Full audit of suspicious events during this attempt.
+                    </p>
+                    <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+                        {events.map((event) => {
+                            const isSuspicious = suspiciousEvents.has(event.event_type);
+                            return (
+                                <div
+                                    key={event.id}
+                                    className={`flex items-center gap-3 px-3 py-2 rounded-lg text-body-sm border ${
+                                        isSuspicious
+                                            ? 'bg-error-container/20 border-error-container text-on-surface'
+                                            : 'bg-surface-container-low border-outline-variant/40 text-on-surface-variant'
+                                    }`}
+                                >
+                                    <span
+                                        className={`material-symbols-outlined text-[18px] ${
+                                            isSuspicious ? 'text-error' : 'text-on-surface-variant'
+                                        }`}
+                                    >
+                                        {isSuspicious ? 'warning' : 'info'}
+                                    </span>
+                                    <span className="font-semibold">{event.label}</span>
+                                    {(() => {
+                                        const r =
+                                            (event.event_data as Record<string, unknown> | null)?.reason ??
+                                            (event.event_data as Record<string, unknown> | null)?.warning_number;
+                                        return r ? (
+                                            <span className="text-on-surface-variant truncate">
+                                                — {String(r)}
+                                            </span>
+                                        ) : null;
+                                    })()}
+                                    <span className="ml-auto text-xs text-on-surface-variant whitespace-nowrap">
+                                        {new Date(event.created_at).toLocaleTimeString()}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
             <form onSubmit={submitGrading} className="space-y-6">
                 {answers.map((answer, index) => {
                     const gradeState = data.grades[index];

@@ -13,6 +13,7 @@ interface AttemptItem {
     total_wrong: number | null;
     total_unanswered: number | null;
     time_spent_seconds: number | null;
+    warnings_count: number;
     started_at: string | null;
     submitted_at: string | null;
 }
@@ -138,6 +139,7 @@ export default function ResultsIndex({ test, attempts, stats, filters }: IndexPr
                                 <th className="px-6 py-4 font-semibold">Status</th>
                                 <th className="px-6 py-4 font-semibold">Score</th>
                                 <th className="px-6 py-4 font-semibold">Correct / Wrong</th>
+                                <th className="px-6 py-4 font-semibold">Warnings</th>
                                 <th className="px-6 py-4 font-semibold">Time Spent</th>
                                 <th className="px-6 py-4 font-semibold text-right">Actions</th>
                             </tr>
@@ -145,7 +147,7 @@ export default function ResultsIndex({ test, attempts, stats, filters }: IndexPr
                         <tbody className="text-body-sm divide-y divide-outline-variant/40">
                             {attempts.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-12 text-center text-on-surface-variant">
+                                    <td colSpan={7} className="px-6 py-12 text-center text-on-surface-variant">
                                         No participants found for this test.
                                     </td>
                                 </tr>
@@ -180,6 +182,19 @@ export default function ResultsIndex({ test, attempts, stats, filters }: IndexPr
                                             <span className="text-emerald-600 font-semibold">{att.total_correct ?? 0}</span>
                                             {' / '}
                                             <span className="text-error font-semibold">{att.total_wrong ?? 0}</span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {(att.warnings_count ?? 0) > 0 ? (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-error-container text-on-error-container">
+                                                    <span className="material-symbols-outlined text-[14px]">warning</span>
+                                                    {att.warnings_count}
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                    <span className="material-symbols-outlined text-[14px]">verified</span>
+                                                    0
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="px-6 py-4 text-on-surface-variant">
                                             {formatDuration(att.time_spent_seconds)}

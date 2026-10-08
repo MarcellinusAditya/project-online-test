@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AttemptEventType;
 use App\Models\Attempt;
 use App\Models\AttemptAnswer;
 use App\Models\Test;
@@ -19,7 +20,17 @@ class TestResultController extends Controller
 
         $search = $request->input('search');
 
+        $suspiciousTypes = [
+            AttemptEventType::FULLSCREEN_EXITED->value,
+            AttemptEventType::TAB_HIDDEN->value,
+            AttemptEventType::WINDOW_BLUR->value,
+            AttemptEventType::WARNING_ISSUED->value,
+        ];
+
         $attempts = $test->attempts()
+            ->withCount([
+                'events as warnings_count' => fn($q) => $q->whereIn('event_type', $suspiciousTypes),
+            ])
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('participant_name', 'like', "%{$search}%")
@@ -55,6 +66,18 @@ class TestResultController extends Controller
         abort_if($attempt->test_id !== $test->id, 404);
 
         $attempt->load(['answers.question.options', 'answers.questionOption']);
+
+        $events = $attempt->events()
+            ->latest()
+            ->take(100)
+            ->get()
+            ->map(fn($event) => [
+                'id' => $event->id,
+                'event_type' => $event->event_type->value,
+                'label' => $event->event_type->label(),
+                'event_data' => $event->event_data,
+                'created_at' => $event->created_at->toIso8601String(),
+            ]);
 
         $answers = $attempt->answers->map(function ($answer) {
             $question = $answer->question;
@@ -99,6 +122,7 @@ class TestResultController extends Controller
                 'submitted_at' => $attempt->submitted_at?->toIso8601String(),
             ],
             'answers' => $answers,
+            'events' => $events,
         ]);
     }
 

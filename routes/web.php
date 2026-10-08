@@ -45,6 +45,7 @@ Route::post('/join', [JoinController::class, 'store'])->name('join.store');
 
 Route::get('/attempt/{id}', [AttemptController::class, 'show'])->name('attempt.show');
 Route::post('/attempt/{id}/answer', [AttemptController::class, 'saveAnswer'])->name('attempt.answer');
+Route::post('/attempt/{id}/event', [AttemptController::class, 'logEvent'])->name('attempt.event');
 Route::post('/attempt/{id}/submit', [AttemptController::class, 'submit'])->name('attempt.submit');
 Route::get('/attempt/{id}/result', [AttemptController::class, 'result'])->name('attempt.result');
 
