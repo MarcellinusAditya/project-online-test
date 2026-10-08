@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::post('tests/{test}/unpublish', [TestController::class, 'unpublish'])->name('tests.unpublish');
 
     Route::resource('tests.questions', QuestionController::class)->except(['show']);
+    Route::post('tests/{test}/questions/reorder', [QuestionController::class, 'reorder'])->name('tests.questions.reorder');
 
     Route::get('tests/{test}/results', [TestResultController::class, 'index'])->name('tests.results.index');
     Route::get('tests/{test}/attempts/{attempt}', [TestResultController::class, 'show'])->name('tests.attempts.show');

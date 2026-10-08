@@ -127,6 +127,35 @@ class QuestionController extends Controller
             ->with('success', 'Question deleted successfully.');
     }
 
+    public function reorder(Request $request, Test $test): RedirectResponse
+    {
+        Gate::authorize('update', $test);
+
+        $validated = $request->validate([
+            'question_ids' => 'required|array|min:1',
+            'question_ids.*' => 'integer|exists:questions,id',
+        ]);
+
+        $ownedIds = $test->questions()->pluck('questions.id')->all();
+        $sentIds = array_map('intval', $validated['question_ids']);
+        sort($ownedIds);
+        $sortedSent = $sentIds;
+        sort($sortedSent);
+
+        abort_if($ownedIds !== $sortedSent, 422, 'Question list does not match this test.');
+
+        DB::transaction(function () use ($test, $validated) {
+            foreach ($validated['question_ids'] as $position => $questionId) {
+                $test->questions()->updateExistingPivot($questionId, [
+                    'sort_order' => $position + 1,
+                ]);
+            }
+        });
+
+        return redirect()->route('tests.questions.index', $test)
+            ->with('success', 'Question order updated successfully.');
+    }
+
     private function getOrCreateQuestionBank($user, Test $test): int
     {
         $bank = $user->questionBanks()
