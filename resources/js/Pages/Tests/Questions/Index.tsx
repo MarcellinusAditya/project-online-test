@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Question, QuestionOption, Test } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface QuestionsIndexProps {
     test: Test;
@@ -9,12 +9,56 @@ interface QuestionsIndexProps {
 }
 
 export default function QuestionsIndex({ test, questions }: QuestionsIndexProps) {
+    const [orderedQuestions, setOrderedQuestions] = useState<Question[]>(questions);
     const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(
         questions.length > 0 ? questions[0].id : null
     );
     const [questionType, setQuestionType] = useState<'multiple_choice' | 'essay'>('multiple_choice');
+    const [draggedIndex, setDragIndex] = useState<number | null>(null);
 
-    const selectedQuestion = questions.find((q) => q.id === selectedQuestionId);
+    useEffect(() => {
+        setOrderedQuestions(questions);
+    }, [questions]);
+
+    const saveOrder = (newList: Question[]) => {
+        setOrderedQuestions(newList);
+        router.post(
+            route('tests.questions.reorder', test.id),
+            { question_ids: newList.map((q) => q.id) },
+            { preserveScroll: true, preserveState: true }
+        );
+    };
+
+    const moveQuestion = (index: number, direction: 'up' | 'down') => {
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= orderedQuestions.length) return;
+        const newList = [...orderedQuestions];
+        const [moved] = newList.splice(index, 1);
+        newList.splice(targetIndex, 0, moved);
+        saveOrder(newList);
+    };
+
+    const handleDragStart = (e: React.DragEvent, index: number) => {
+        setDragIndex(index);
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleDragOver = (e: React.DragEvent, index: number) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    };
+
+    const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+        e.preventDefault();
+        if (draggedIndex === null || draggedIndex === dropIndex) return;
+        const newList = [...orderedQuestions];
+        const [moved] = newList.splice(draggedIndex, 1);
+        newList.splice(dropIndex, 0, moved);
+        setDragIndex(null);
+        saveOrder(newList);
+    };
+
+    const selectedQuestion = orderedQuestions.find((q) => q.id === selectedQuestionId);
 
     const { data, setData, post, processing, errors } = useForm({
         question: '',
@@ -35,7 +79,7 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
             router.delete(route('tests.questions.destroy', [test.id, question.id]), {
                 onSuccess: () => {
                     if (selectedQuestionId === question.id) {
-                        setSelectedQuestionId(questions.length > 1 ? questions[0].id : null);
+                        setSelectedQuestionId(orderedQuestions.length > 1 ? orderedQuestions[0].id : null);
                     }
                 },
             });
@@ -66,7 +110,7 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
         post(route('tests.questions.store', test.id));
     };
 
-    const totalPoints = questions.reduce((sum, q) => sum + q.points, 0);
+    const totalPoints = orderedQuestions.reduce((sum, q) => sum + q.points, 0);
 
     return (
         <AuthenticatedLayout>
@@ -88,7 +132,7 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                                 {test.status}
                             </span>
                             <span className="px-2 py-0.5 rounded bg-secondary-container text-primary font-label-caps text-label-caps">
-                                {questions.length} Questions
+                                {orderedQuestions.length} Questions
                             </span>
                         </div>
                         <div className="flex items-center gap-1 text-on-surface-variant mt-0.5">
@@ -122,14 +166,19 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                         </Link>
                     </div>
                     <div className="flex-1 overflow-y-auto p-2 space-y-1">
-                        {questions.length === 0 ? (
+                        {orderedQuestions.length === 0 ? (
                             <div className="p-4 text-center text-on-surface-variant font-body-sm">
                                 No questions yet. Click "Add" to create one.
                             </div>
                         ) : (
-                            questions.map((question, index) => (
+                            orderedQuestions.map((question, index) => (
                                 <div
                                     key={question.id}
+                                    draggable
+                                    onDragStart={(e) => handleDragStart(e, index)}
+                                    onDragOver={(e) => handleDragOver(e, index)}
+                                    onDrop={(e) => handleDrop(e, index)}
+                                    onDragEnd={() => setDragIndex(null)}
                                     onClick={() => {
                                         setSelectedQuestionId(question.id);
                                         setQuestionType(question.type as 'multiple_choice' | 'essay');
@@ -138,9 +187,9 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                                         selectedQuestionId === question.id
                                             ? 'bg-surface-container border border-primary'
                                             : 'hover:bg-surface-container border border-transparent'
-                                    }`}
+                                    } ${draggedIndex === index ? 'opacity-40' : ''}`}
                                 >
-                                    <span className="material-symbols-outlined text-outline cursor-grab hover:text-on-surface text-[18px] opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span className="material-symbols-outlined text-outline cursor-grab active:cursor-grabbing hover:text-on-surface text-[18px] shrink-0" title="Drag to reorder">
                                         drag_indicator
                                     </span>
                                     <span className="font-mono-label text-mono-label text-on-surface-variant w-5">
@@ -165,6 +214,24 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                                     }`} title="Complete">
                                         check_circle
                                     </span>
+                                    <div className="flex flex-col shrink-0 -my-1">
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); moveQuestion(index, 'up'); }}
+                                            disabled={index === 0}
+                                            className="p-0.5 rounded text-on-surface-variant hover:text-primary hover:bg-surface-container-high disabled:opacity-30 disabled:cursor-not-allowed leading-none"
+                                            title="Move up"
+                                        >
+                                            <span className="material-symbols-outlined text-[16px] block">keyboard_arrow_up</span>
+                                        </button>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); moveQuestion(index, 'down'); }}
+                                            disabled={index === orderedQuestions.length - 1}
+                                            className="p-0.5 rounded text-on-surface-variant hover:text-primary hover:bg-surface-container-high disabled:opacity-30 disabled:cursor-not-allowed leading-none"
+                                            title="Move down"
+                                        >
+                                            <span className="material-symbols-outlined text-[16px] block">keyboard_arrow_down</span>
+                                        </button>
+                                    </div>
                                 </div>
                             ))
                         )}
@@ -181,7 +248,7 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                                 <div className="px-6 py-4 border-b border-outline-variant flex flex-wrap items-center justify-between gap-4 bg-surface-bright">
                                     <div className="flex items-center gap-3">
                                         <h3 className="font-title-sm text-[18px] font-semibold text-on-surface">
-                                            Question {questions.findIndex((q) => q.id === selectedQuestionId) + 1}
+                                            Question {orderedQuestions.findIndex((q) => q.id === selectedQuestionId) + 1}
                                         </h3>
                                         <span className="px-2 py-1 rounded-md bg-secondary-container text-on-secondary-container font-label-caps text-[11px] flex items-center gap-1">
                                             <span className="material-symbols-outlined text-[14px]">
@@ -378,12 +445,12 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                         </div>
                     </div>
                     <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-surface-container-low">
-                        {questions.length === 0 ? (
+                        {orderedQuestions.length === 0 ? (
                             <div className="text-center text-on-surface-variant font-body-sm py-8">
                                 No questions in bank yet.
                             </div>
                         ) : (
-                            questions.map((question) => (
+                            orderedQuestions.map((question) => (
                                 <div
                                     key={question.id}
                                     onClick={() => {
@@ -424,7 +491,7 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                 <div className="flex items-center gap-6 text-on-surface-variant font-body-sm">
                     <div className="flex items-center gap-2">
                         <span className="material-symbols-outlined text-[18px]">format_list_numbered</span>
-                        <span className="font-medium text-on-surface">{questions.length}</span> Questions
+                        <span className="font-medium text-on-surface">{orderedQuestions.length}</span> Questions
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="material-symbols-outlined text-[18px]">workspace_premium</span>
