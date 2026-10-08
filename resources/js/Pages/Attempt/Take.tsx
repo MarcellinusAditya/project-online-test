@@ -45,7 +45,23 @@ export default function Take({ attempt, questions, current_question_index }: Tak
     const [remainingSeconds, setRemainingSeconds] = useState(attempt.remaining_seconds);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+    const [warningCount, setWarningCount] = useState(0);
+    const [lastWarning, setLastWarning] = useState<string | null>(null);
+    const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(
+        typeof document !== 'undefined' &&
+            !!document.documentElement?.requestFullscreen &&
+            !document.fullscreenElement,
+    );
+    const [isFullscreen, setIsFullscreen] = useState(
+        typeof document !== 'undefined' && !!document.fullscreenElement,
+    );
     const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const violationCountRef = useRef(0);
+    const lastWarningAtRef = useRef(0);
+    const eventThrottleRef = useRef<Record<string, number>>({});
+
+    const canUseFullscreen =
+        typeof document !== 'undefined' && !!document.documentElement?.requestFullscreen;
 
     const currentQuestion = questions[currentIndex];
 
@@ -89,6 +105,29 @@ export default function Take({ attempt, questions, current_question_index }: Tak
         }
     }, [attempt.id]);
 
+    const logEvent = useCallback(
+        async (eventType: string, extra?: Record<string, unknown>) => {
+            const now = Date.now();
+            if (now - (eventThrottleRef.current[eventType] || 0) < 5000) return;
+            eventThrottleRef.current[eventType] = now;
+            try {
+                await fetch(`/attempt/${attempt.id}/event`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN':
+                            document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({ event_type: eventType, event_data: extra }),
+                });
+            } catch (error) {
+                console.error('Failed to log event:', error);
+            }
+        },
+        [attempt.id],
+    );
+
     const handleOptionSelect = (optionId: number) => {
         setAnswers((prev) => ({
             ...prev,
@@ -129,6 +168,11 @@ export default function Take({ attempt, questions, current_question_index }: Tak
         }
     };
 
+    const handleSubmitRef = useRef(handleSubmit);
+    useEffect(() => {
+        handleSubmitRef.current = handleSubmit;
+    });
+
     useEffect(() => {
         if (remainingSeconds <= 0) {
             handleSubmit();
@@ -149,31 +193,121 @@ export default function Take({ attempt, questions, current_question_index }: Tak
         return () => clearInterval(timer);
     }, [remainingSeconds]);
 
+    const triggerViolation = useCallback(
+        (reason: string, eventType: string) => {
+            const now = Date.now();
+            if (now - lastWarningAtRef.current < 2000) return;
+            lastWarningAtRef.current = now;
+
+            violationCountRef.current += 1;
+            const newCount = violationCountRef.current;
+            setWarningCount(newCount);
+            setLastWarning(reason);
+
+            logEvent(eventType, { reason, violation_number: newCount });
+            logEvent('warning_issued', { reason, warning_number: newCount });
+
+            if (newCount >= 5) {
+                alert(
+                    'Maximum violation limit reached (5 warnings). Your test will be submitted automatically.',
+                );
+                handleSubmitRef.current();
+            }
+        },
+        [logEvent],
+    );
+
+    const requestFullscreenMode = async () => {
+        try {
+            if (document.documentElement.requestFullscreen) {
+                await document.documentElement.requestFullscreen();
+                setShowFullscreenPrompt(false);
+                setIsFullscreen(true);
+                logEvent('fullscreen_entered');
+            }
+        } catch (err) {
+            console.warn('Fullscreen rejected:', err);
+        }
+    };
+
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.hidden) {
-                fetch(`/attempt/${attempt.id}/answer`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    body: JSON.stringify({
-                        question_id: -1,
-                        event_type: 'tab_hidden',
-                    }),
-                });
+                logEvent('tab_hidden');
+                triggerViolation('Leaving or switching tab is prohibited during test', 'tab_hidden');
+            } else {
+                logEvent('tab_visible');
+            }
+        };
+
+        const handleBlur = () => {
+            logEvent('window_blur');
+            triggerViolation('Window lost focus', 'window_blur');
+        };
+
+        const handleFocus = () => {
+            logEvent('window_focus');
+        };
+
+        const handleFullscreenChange = () => {
+            const isFS = !!document.fullscreenElement;
+            setIsFullscreen(isFS);
+            if (!isFS) {
+                logEvent('fullscreen_exited');
+                triggerViolation('Exited fullscreen mode', 'fullscreen_exited');
+            } else {
+                logEvent('fullscreen_entered');
             }
         };
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-    }, [attempt.id]);
+        window.addEventListener('blur', handleBlur);
+        window.addEventListener('focus', handleFocus);
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('blur', handleBlur);
+            window.removeEventListener('focus', handleFocus);
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        };
+    }, [logEvent, triggerViolation]);
 
     return (
         <div className="min-h-screen bg-background flex flex-col">
             <Head title={`${attempt.test_title} - Taking Test`} />
+
+            {/* Fullscreen Prompt Overlay */}
+            {showFullscreenPrompt && canUseFullscreen && (
+                <div className="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+                    <div className="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 md:p-8 max-w-md text-center shadow-2xl">
+                        <div className="w-16 h-16 rounded-2xl bg-primary-fixed flex items-center justify-center mx-auto mb-4 text-primary">
+                            <span className="material-symbols-outlined text-3xl">fullscreen</span>
+                        </div>
+                        <h3 className="font-bold text-headline-md text-on-surface mb-2">Fullscreen Required</h3>
+                        <p className="text-body-md text-on-surface-variant mb-6">
+                            This test requires fullscreen mode to maintain test integrity. Exiting fullscreen will trigger a warning.
+                        </p>
+                        <button
+                            onClick={requestFullscreenMode}
+                            className="w-full bg-primary-container text-on-primary font-title-sm py-3 rounded-lg hover:bg-primary transition-colors shadow-sm"
+                        >
+                            Enter Fullscreen & Start
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Warning Banner */}
+            {warningCount > 0 && (
+                <div className="bg-error-container text-on-error-container px-4 py-2 flex items-center justify-between text-body-sm shrink-0 z-30">
+                    <div className="flex items-center gap-2 font-medium">
+                        <span className="material-symbols-outlined text-base">warning</span>
+                        <span>Warning ({warningCount}/5): {lastWarning}</span>
+                    </div>
+                    <span className="text-xs uppercase tracking-wider font-bold">Anti-Cheat Active</span>
+                </div>
+            )}
 
             {/* Header */}
             <header className="bg-surface-container-lowest border-b border-outline-variant h-16 flex justify-between items-center px-6 shrink-0 z-20 shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
@@ -186,6 +320,17 @@ export default function Take({ attempt, questions, current_question_index }: Tak
                     </div>
                 </div>
                 <div className="flex items-center gap-6">
+                    <div className="hidden sm:flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider">
+                        {isFullscreen ? (
+                            <span className="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+                                <span className="material-symbols-outlined text-[14px]">fullscreen</span> Secure
+                            </span>
+                        ) : (
+                            <span className="flex items-center gap-1.5 text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+                                <span className="material-symbols-outlined text-[14px]">warning</span> Not Secure
+                            </span>
+                        )}
+                    </div>
                     <div className="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-lg border border-outline-variant/50">
                         <span className="material-symbols-outlined text-primary-container">timer</span>
                         <span className={`font-mono-label text-mono-label font-medium ${

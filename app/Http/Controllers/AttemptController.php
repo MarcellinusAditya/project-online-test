@@ -90,6 +90,35 @@ class AttemptController extends Controller
         return response()->json(['success' => true, 'answer_id' => $answer->id]);
     }
 
+    public function logEvent(Request $request, string $attemptId)
+    {
+        $attempt = Attempt::findOrFail($attemptId);
+
+        if (! $attempt->isActive()) {
+            return response()->json(['error' => 'Attempt is no longer active'], 422);
+        }
+
+        $validated = $request->validate([
+            'event_type' => 'required|string|in:fullscreen_entered,fullscreen_exited,tab_hidden,tab_visible,window_blur,window_focus,warning_issued',
+            'event_data' => 'nullable|array',
+        ]);
+
+        $type = AttemptEventType::from($validated['event_type']);
+
+        // Deduplicate: ignore the same event logged within the last 10 seconds
+        // (blur + tab_hidden + fullscreen_exited often fire together for one action).
+        $recentExists = $attempt->events()
+            ->where('event_type', $type->value)
+            ->where('created_at', '>=', now()->subSeconds(10))
+            ->exists();
+
+        if (! $recentExists) {
+            AttemptEvent::log($attempt, $type, $validated['event_data'] ?? null);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
     public function submit(Request $request, string $attemptId)
     {
         $attempt = Attempt::findOrFail($attemptId);
