@@ -50,6 +50,12 @@ export default function TestsShow({ test }: TestShowProps) {
                     </div>
                     <div className="flex gap-3">
                         <Link
+                            href={route('tests.results.index', test.id)}
+                            className="bg-primary-fixed text-on-primary-fixed text-body-sm px-4 py-2 rounded-lg hover:bg-primary-fixed-dim transition-colors flex items-center gap-2 font-medium"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">analytics</span> Results
+                        </Link>
+                        <Link
                             href={route('tests.edit', test.id)}
                             className="bg-surface text-on-surface text-body-sm px-4 py-2 rounded-lg border border-outline-variant hover:bg-surface-variant transition-colors flex items-center gap-2"
                         >

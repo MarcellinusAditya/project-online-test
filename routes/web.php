@@ -6,6 +6,7 @@ use App\Http\Controllers\JoinController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\TestResultController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,6 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::post('tests/{test}/unpublish', [TestController::class, 'unpublish'])->name('tests.unpublish');
 
     Route::resource('tests.questions', QuestionController::class)->except(['show']);
+
+    Route::get('tests/{test}/results', [TestResultController::class, 'index'])->name('tests.results.index');
+    Route::get('tests/{test}/attempts/{attempt}', [TestResultController::class, 'show'])->name('tests.attempts.show');
+    Route::post('tests/{test}/attempts/{attempt}/grade', [TestResultController::class, 'grade'])->name('tests.attempts.grade');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
