@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AttemptEventType;
+use App\Exports\TestResultsExport;
 use App\Models\Attempt;
 use App\Models\AttemptAnswer;
 use App\Models\Test;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TestResultController extends Controller
 {
@@ -161,6 +165,15 @@ class TestResultController extends Controller
         $this->recalculateAttemptScore($attempt);
 
         return back()->with('success', 'Grading updated successfully.');
+    }
+
+    public function export(Request $request, Test $test): BinaryFileResponse
+    {
+        Gate::authorize('view', $test);
+
+        $filename = Str::slug($test->title).'-results-'.now()->format('Ymd-His').'.xlsx';
+
+        return Excel::download(new TestResultsExport($test), $filename);
     }
 
     private function recalculateAttemptScore(Attempt $attempt): void

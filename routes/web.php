@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('tests/{test}/results', [TestResultController::class, 'index'])->name('tests.results.index');
     Route::get('tests/{test}/attempts/{attempt}', [TestResultController::class, 'show'])->name('tests.attempts.show');
     Route::post('tests/{test}/attempts/{attempt}/grade', [TestResultController::class, 'grade'])->name('tests.attempts.grade');
+    Route::get('tests/{test}/export', [TestResultController::class, 'export'])->name('tests.export');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

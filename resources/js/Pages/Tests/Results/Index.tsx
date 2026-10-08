@@ -107,7 +107,8 @@ export default function ResultsIndex({ test, attempts, stats, filters }: IndexPr
 
             {/* Search Bar */}
             <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 mb-6 shadow-sm">
-                <form onSubmit={handleSearch} className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <form onSubmit={handleSearch} className="flex gap-3 flex-1">
                     <div className="relative flex-1">
                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">
                             search
@@ -127,6 +128,14 @@ export default function ResultsIndex({ test, attempts, stats, filters }: IndexPr
                         Search
                     </button>
                 </form>
+                    <a
+                        href={route('tests.export', test.id)}
+                        className="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white font-body-sm font-medium px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors whitespace-nowrap"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">download</span>
+                        Export Excel
+                    </a>
+                </div>
             </div>
 
             {/* Participant Table */}
