@@ -1,15 +1,19 @@
+import Lightbox from '@/Components/Lightbox';
 import { Head } from '@inertiajs/react';
+import { useState } from 'react';
 
 interface Answer {
     id: number;
     question_id: number;
     question: string;
+    question_image_url?: string | null;
     type: 'multiple_choice' | 'essay';
     points: number;
     options: {
         id: number;
         key: string;
         text: string;
+        image_url?: string | null;
         is_correct: boolean;
     }[];
     selected_option_id: number | null;
@@ -41,6 +45,7 @@ interface ResultProps {
 }
 
 export default function Result({ attempt, answers }: ResultProps) {
+    const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
     const formatTime = (seconds: number | null) => {
         if (!seconds) return '0m';
         const mins = Math.floor(seconds / 60);
@@ -134,6 +139,20 @@ export default function Result({ attempt, answers }: ResultProps) {
                                         </span>
                                     </div>
                                     <p className="text-on-surface mb-3">{answer.question}</p>
+                                    {answer.question_image_url && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setLightboxSrc(answer.question_image_url ?? null)}
+                                            className="block mb-3 rounded-lg overflow-hidden border border-outline-variant max-w-md"
+                                            title="Click to zoom"
+                                        >
+                                            <img
+                                                src={answer.question_image_url}
+                                                alt={`Question ${index + 1} image`}
+                                                className="max-h-64 w-auto object-contain"
+                                            />
+                                        </button>
+                                    )}
 
                                     {answer.type === 'multiple_choice' && (
                                         <div className="space-y-2 ml-11">
@@ -151,7 +170,17 @@ export default function Result({ attempt, answers }: ResultProps) {
                                                         }`}
                                                     >
                                                         <span className="font-medium">{option.key}.</span>
-                                                        <span>{option.text}</span>
+                                                        <span className="flex-1 min-w-0">
+                                                            {option.text && <span>{option.text}</span>}
+                                                            {option.image_url && (
+                                                                <img
+                                                                    src={option.image_url}
+                                                                    alt={`Option ${option.key} image`}
+                                                                    onClick={() => setLightboxSrc(option.image_url ?? null)}
+                                                                    className="mt-1 max-h-32 rounded-md border border-outline-variant object-contain cursor-zoom-in"
+                                                                />
+                                                            )}
+                                                        </span>
                                                         {option.is_correct && (
                                                             <span className="ml-auto text-xs text-green-600">✓ Correct</span>
                                                         )}
@@ -192,6 +221,7 @@ export default function Result({ attempt, answers }: ResultProps) {
                     </div>
                 )}
             </div>
+            <Lightbox src={lightboxSrc} alt="Zoomed image" onClose={() => setLightboxSrc(null)} />
         </div>
     );
 }

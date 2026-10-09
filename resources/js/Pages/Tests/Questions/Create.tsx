@@ -7,20 +7,29 @@ interface QuestionsCreateProps {
     test: Test;
 }
 
+interface OptionForm {
+    key: string;
+    text: string;
+    image: File | null;
+    preview: string | null;
+}
+
 export default function QuestionsCreate({ test }: QuestionsCreateProps) {
     const [questionType, setQuestionType] = useState<'multiple_choice' | 'essay'>('multiple_choice');
+    const [questionPreview, setQuestionPreview] = useState<string | null>(null);
 
     const { data, setData, post, processing, errors } = useForm({
         question: '',
+        question_image: null as File | null,
         type: 'multiple_choice',
         points: 5,
         explanation: '',
         options: [
-            { key: 'A', text: '' },
-            { key: 'B', text: '' },
-            { key: 'C', text: '' },
-            { key: 'D', text: '' },
-        ],
+            { key: 'A', text: '', image: null, preview: null },
+            { key: 'B', text: '', image: null, preview: null },
+            { key: 'C', text: '', image: null, preview: null },
+            { key: 'D', text: '', image: null, preview: null },
+        ] as OptionForm[],
         correct_option: 0,
     });
 
@@ -29,9 +38,33 @@ export default function QuestionsCreate({ test }: QuestionsCreateProps) {
         setData('type', type);
     };
 
+    const handleQuestionImage = (file: File | undefined) => {
+        if (!file) return;
+        setData('question_image', file);
+        setQuestionPreview(URL.createObjectURL(file));
+    };
+
+    const clearQuestionImage = () => {
+        setData('question_image', null);
+        setQuestionPreview(null);
+    };
+
+    const handleOptionImage = (index: number, file: File | undefined) => {
+        if (!file) return;
+        const newOptions = [...data.options];
+        newOptions[index] = { ...newOptions[index], image: file, preview: URL.createObjectURL(file) };
+        setData('options', newOptions);
+    };
+
+    const clearOptionImage = (index: number) => {
+        const newOptions = [...data.options];
+        newOptions[index] = { ...newOptions[index], image: null, preview: null };
+        setData('options', newOptions);
+    };
+
     const addOption = () => {
         const nextKey = String.fromCharCode(65 + data.options.length);
-        setData('options', [...data.options, { key: nextKey, text: '' }]);
+        setData('options', [...data.options, { key: nextKey, text: '', image: null, preview: null }]);
     };
 
     const removeOption = (index: number) => {
@@ -45,7 +78,7 @@ export default function QuestionsCreate({ test }: QuestionsCreateProps) {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('tests.questions.store', test.id));
+        post(route('tests.questions.store', test.id), { forceFormData: true });
     };
 
     return (
@@ -103,14 +136,53 @@ export default function QuestionsCreate({ test }: QuestionsCreateProps) {
                                     </label>
                                     <textarea
                                         className="w-full bg-surface-bright border border-outline-variant rounded-lg p-4 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none transition-all placeholder:text-outline"
-                                        placeholder="Enter your question here..."
+                                        placeholder="Enter your question here... (optional if an image is provided)"
                                         rows={3}
                                         value={data.question}
                                         onChange={(e) => setData('question', e.target.value)}
-                                        required
                                     />
                                     {errors.question && (
                                         <p className="mt-1 text-sm text-error">{errors.question}</p>
+                                    )}
+                                </div>
+
+                                {/* Question Image */}
+                                <div>
+                                    <label className="block font-body-sm font-medium text-on-surface mb-2">
+                                        Question Image <span className="text-on-surface-variant font-normal">(optional, max 1 MB)</span>
+                                    </label>
+                                    {questionPreview ? (
+                                        <div className="relative inline-block">
+                                            <img
+                                                src={questionPreview}
+                                                alt="Question preview"
+                                                className="max-h-56 rounded-lg border border-outline-variant"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={clearQuestionImage}
+                                                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-error transition-colors"
+                                                title="Remove image"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px]">close</span>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <label className="flex items-center gap-3 px-4 py-3 rounded-lg border border-dashed border-outline-variant bg-surface-bright cursor-pointer hover:border-primary transition-colors">
+                                            <span className="material-symbols-outlined text-on-surface-variant">image</span>
+                                            <span className="font-body-sm text-on-surface-variant">
+                                                Click to upload an image (JPG, PNG, WebP)
+                                            </span>
+                                            <input
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/webp"
+                                                className="hidden"
+                                                onChange={(e) => handleQuestionImage(e.target.files?.[0])}
+                                            />
+                                        </label>
+                                    )}
+                                    {errors.question_image && (
+                                        <p className="mt-1 text-sm text-error">{errors.question_image}</p>
                                     )}
                                 </div>
 
@@ -149,7 +221,7 @@ export default function QuestionsCreate({ test }: QuestionsCreateProps) {
                                                             className="w-5 h-5 text-primary border-outline-variant focus:ring-primary cursor-pointer"
                                                         />
                                                     </div>
-                                                    <div className="flex-1">
+                                                    <div className="flex-1 space-y-2">
                                                         <input
                                                             type="text"
                                                             className="w-full bg-transparent border-none p-0 font-body-md text-on-surface focus:ring-0"
@@ -159,9 +231,36 @@ export default function QuestionsCreate({ test }: QuestionsCreateProps) {
                                                                 newOptions[index].text = e.target.value;
                                                                 setData('options', newOptions);
                                                             }}
-                                                            placeholder={`Option ${option.key}`}
-                                                            required
+                                                            placeholder={`Option ${option.key} (optional if image provided)`}
                                                         />
+                                                        {option.preview ? (
+                                                            <div className="relative inline-block">
+                                                                <img
+                                                                    src={option.preview}
+                                                                    alt={`Option ${option.key} preview`}
+                                                                    className="max-h-28 rounded-lg border border-outline-variant"
+                                                                />
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => clearOptionImage(index)}
+                                                                    className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-error transition-colors"
+                                                                    title="Remove image"
+                                                                >
+                                                                    <span className="material-symbols-outlined text-[14px]">close</span>
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <label className="inline-flex items-center gap-1.5 text-[13px] text-on-surface-variant hover:text-primary cursor-pointer transition-colors">
+                                                                <span className="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+                                                                Add image
+                                                                <input
+                                                                    type="file"
+                                                                    accept="image/jpeg,image/png,image/webp"
+                                                                    className="hidden"
+                                                                    onChange={(e) => handleOptionImage(index, e.target.files?.[0])}
+                                                                />
+                                                            </label>
+                                                        )}
                                                     </div>
                                                     {data.correct_option === index && (
                                                         <div className="flex items-center gap-2">

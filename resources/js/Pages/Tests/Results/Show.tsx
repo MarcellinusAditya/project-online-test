@@ -6,6 +6,7 @@ interface Option {
     id: number;
     key: string;
     text: string;
+    image_url?: string | null;
     is_correct: boolean;
 }
 
@@ -13,6 +14,7 @@ interface AnswerDetail {
     id: number;
     question_id: number;
     question: string;
+    question_image_url?: string | null;
     type: 'multiple_choice' | 'essay';
     max_points: number;
     points_awarded: number;
@@ -212,6 +214,13 @@ export default function ResultsShow({ test, attempt, answers, events = [] }: Sho
                                     <h4 className="font-semibold text-title-sm text-on-surface mt-1">
                                         {answer.question}
                                     </h4>
+                                    {answer.question_image_url && (
+                                        <img
+                                            src={answer.question_image_url}
+                                            alt={`Question ${index + 1} image`}
+                                            className="mt-3 max-h-56 rounded-lg border border-outline-variant object-contain"
+                                        />
+                                    )}
                                 </div>
                                 <span className="text-body-sm font-medium text-on-surface-variant whitespace-nowrap">
                                     Max Points: {answer.max_points}
@@ -242,6 +251,13 @@ export default function ResultsShow({ test, attempt, answers, events = [] }: Sho
                                                 <span>
                                                     <span className="font-mono font-bold mr-2">{opt.key}.</span>
                                                     {opt.text}
+                                                    {opt.image_url && (
+                                                        <img
+                                                            src={opt.image_url}
+                                                            alt={`Option ${opt.key} image`}
+                                                            className="mt-1 max-h-28 rounded-md border border-outline-variant object-contain"
+                                                        />
+                                                    )}
                                                 </span>
                                                 {isSelected && (
                                                     <span className="text-xs font-semibold uppercase px-2 py-0.5 rounded bg-white/80 shadow-xs">
