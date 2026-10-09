@@ -24,6 +24,7 @@ class AiGeneration extends Model
         'source_filename',
         'source_path',
         'status',
+        'source_mode',
         'question_count',
         'question_type',
         'difficulty',

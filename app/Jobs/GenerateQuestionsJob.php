@@ -3,9 +3,11 @@
 namespace App\Jobs;
 
 use App\Models\AiGeneration;
+use App\Services\Ai\ExamTextParser;
 use App\Services\Ai\HeuristicFallbackGenerator;
 use App\Services\Ai\OpenAiCompatibleGenerator;
 use App\Services\Ai\PdfTextExtractor;
+use App\Services\Ai\SourceTypeDetector;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -39,21 +41,48 @@ class GenerateQuestionsJob implements ShouldQueue
 
             $chunks = $extractor->chunk($text);
             $chunk = $chunks[0];
+            $mode = SourceTypeDetector::detect($text);
+            $isExam = $mode === SourceTypeDetector::MODE_EXAM_CONVERT;
 
             $provider = 'heuristic-fallback';
             $drafts = [];
 
             if (! empty(config('services.ai.key'))) {
                 try {
-                    $drafts = (new OpenAiCompatibleGenerator)->generate(
-                        $chunk,
+                    $ai = new OpenAiCompatibleGenerator;
+                    $drafts = $isExam
+                        ? $ai->convert(
+                            $chunk,
+                            $generation->question_count,
+                            $generation->question_type,
+                            $generation->difficulty
+                        )
+                        : $ai->generate(
+                            $chunk,
+                            $generation->question_count,
+                            $generation->question_type,
+                            $generation->difficulty
+                        );
+                    $provider = $ai->name().($isExam ? ':exam-convert' : '');
+                } catch (\Throwable $e) {
+                    Log::warning('AI provider failed, using heuristic fallback', [
+                        'generation_id' => $generation->id,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+
+            if ($drafts === [] && $isExam) {
+                try {
+                    $drafts = ExamTextParser::parse(
+                        $text,
                         $generation->question_count,
                         $generation->question_type,
                         $generation->difficulty
                     );
-                    $provider = (new OpenAiCompatibleGenerator)->name();
+                    $provider = 'exam-parser';
                 } catch (\Throwable $e) {
-                    Log::warning('AI provider failed, using heuristic fallback', [
+                    Log::warning('Exam parser failed, using heuristic fallback', [
                         'generation_id' => $generation->id,
                         'error' => $e->getMessage(),
                     ]);
@@ -67,10 +96,12 @@ class GenerateQuestionsJob implements ShouldQueue
                     $generation->question_type,
                     $generation->difficulty
                 );
+                $provider = (new HeuristicFallbackGenerator)->name();
             }
 
             $generation->update([
                 'status' => AiGeneration::STATUS_COMPLETED,
+                'source_mode' => $mode,
                 'extracted_text' => mb_substr($text, 0, 60000),
                 'draft_questions' => $drafts,
                 'provider' => $provider,

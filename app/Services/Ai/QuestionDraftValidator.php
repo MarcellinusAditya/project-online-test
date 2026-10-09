@@ -47,8 +47,8 @@ class QuestionDraftValidator
             $options = [];
             if ($type === 'multiple_choice') {
                 $rawOptions = is_array($item['options'] ?? null) ? array_values($item['options']) : [];
-                $keys = ['A', 'B', 'C', 'D'];
-                foreach (array_slice($rawOptions, 0, 4) as $i => $opt) {
+                $keys = ['A', 'B', 'C', 'D', 'E', 'F'];
+                foreach (array_slice($rawOptions, 0, 6) as $i => $opt) {
                     $options[] = [
                         'key' => $keys[$i],
                         'text' => (string) ($opt['text'] ?? 'Option '.$keys[$i]),
@@ -59,18 +59,25 @@ class QuestionDraftValidator
                     $i = count($options);
                     $options[] = ['key' => $keys[$i], 'text' => 'Option '.$keys[$i], 'is_correct' => false];
                 }
-                // Guarantee exactly one correct answer.
-                $hasCorrect = collect($options)->contains('is_correct', true);
-                if (! $hasCorrect) {
-                    $options[0]['is_correct'] = true;
+                // Guarantee exactly one correct answer, keeping the AI's
+                // chosen position (randomized) instead of forcing key A.
+                // Exception: exam-convert drafts carry no source key (all
+                // false) — leave them so the provider picks the key.
+                $trueIndexes = [];
+                foreach ($options as $i => $opt) {
+                    if (! empty($opt['is_correct'])) {
+                        $trueIndexes[] = $i;
+                    }
+                }
+                if ($trueIndexes === []) {
+                    $explicitNoKey = ($item['no_known_key'] ?? false) === true;
+                    if (! $explicitNoKey) {
+                        $options[array_rand($options)]['is_correct'] = true;
+                    }
                 } else {
-                    $firstTrue = true;
+                    $keep = $trueIndexes[0];
                     foreach ($options as $i => $opt) {
-                        if ($opt['is_correct'] && ! $firstTrue) {
-                            $options[$i]['is_correct'] = false;
-                        } elseif ($opt['is_correct']) {
-                            $firstTrue = false;
-                        }
+                        $options[$i]['is_correct'] = ($i === $keep);
                     }
                 }
             }
