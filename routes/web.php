@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AiGeneratorController;
 use App\Http\Controllers\AttemptController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JoinController;
@@ -36,6 +37,13 @@ Route::middleware('auth')->group(function () {
     Route::get('tests/{test}/attempts/{attempt}', [TestResultController::class, 'show'])->name('tests.attempts.show');
     Route::post('tests/{test}/attempts/{attempt}/grade', [TestResultController::class, 'grade'])->name('tests.attempts.grade');
     Route::get('tests/{test}/export', [TestResultController::class, 'export'])->name('tests.export');
+
+    Route::get('ai-generator', [AiGeneratorController::class, 'index'])->name('ai-generator.index');
+    Route::post('ai-generator', [AiGeneratorController::class, 'store'])->name('ai-generator.store');
+    Route::get('ai-generator/{generation}', [AiGeneratorController::class, 'show'])->name('ai-generator.show');
+    Route::get('ai-generator/{generation}/status', [AiGeneratorController::class, 'status'])->name('ai-generator.status');
+    Route::post('ai-generator/{generation}/approve', [AiGeneratorController::class, 'approve'])->name('ai-generator.approve');
+    Route::delete('ai-generator/{generation}', [AiGeneratorController::class, 'destroy'])->name('ai-generator.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

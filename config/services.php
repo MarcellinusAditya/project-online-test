@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'ai' => [
+        'key' => env('OPENAI_API_KEY'),
+        'base' => env('OPENAI_API_BASE', 'https://api.openai.com/v1'),
+        'model' => env('OPENAI_MODEL', 'gpt-4o-mini'),
+        'timeout' => env('OPENAI_TIMEOUT', 90),
+    ],
+
 ];

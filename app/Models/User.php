@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(QuestionBank::class);
     }
+
+    public function aiGenerations(): HasMany
+    {
+        return $this->hasMany(AiGeneration::class);
+    }
 }
