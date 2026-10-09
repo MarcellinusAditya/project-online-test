@@ -20,6 +20,7 @@ interface Generation {
     id: number;
     source_filename: string;
     status: string;
+    source_mode?: string | null;
     question_count: number;
     question_type: string;
     difficulty: string;
@@ -134,6 +135,20 @@ export default function AiGeneratorShow({ generation, tests }: ShowProps) {
                     <p className="text-body-sm text-on-surface-variant">
                         Provider: <span className="font-mono text-xs">{generation.provider}</span>
                     </p>
+                    {generation.source_mode && (
+                        <p className="text-body-sm text-on-surface-variant mt-1">
+                            Detected:{' '}
+                            <span
+                                className={`inline-flex px-2 py-0.5 rounded-full text-xs font-semibold ${
+                                    generation.source_mode === 'exam_convert'
+                                        ? 'bg-primary-fixed text-on-primary-fixed'
+                                        : 'bg-surface-container-high text-on-surface-variant'
+                                }`}
+                            >
+                                {generation.source_mode === 'exam_convert' ? 'Exam sheet — converted as-is' : 'Study material — new questions'}
+                            </span>
+                        </p>
+                    )}
                     {errorMessage && (
                         <p className="text-body-sm text-error mt-1">{errorMessage}</p>
                     )}

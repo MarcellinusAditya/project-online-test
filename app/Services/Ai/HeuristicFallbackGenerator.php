@@ -15,6 +15,57 @@ class HeuristicFallbackGenerator implements QuestionGeneratorInterface
 
     public function generate(string $sourceText, int $count, string $questionType, string $difficulty): array
     {
+        $mode = SourceTypeDetector::detect($sourceText);
+
+        // Exam sheets already contain real questions: parse them verbatim
+        // (never cloze-ify). The source text carries no answer key, so leave
+        // is_correct=false and keep the original A-E order — the provider
+        // picks the key during review.
+        if ($mode === SourceTypeDetector::MODE_EXAM_CONVERT) {
+            try {
+                return ExamTextParser::parse($sourceText, $count, $questionType, $difficulty);
+            } catch (\Throwable) {
+                // Fall through to material-style generation below.
+            }
+        }
+
+        return $this->generateFromMaterial($sourceText, $count, $questionType, $difficulty);
+    }
+
+    /**
+     * Shuffle option order so the correct answer lands on a random key.
+     */
+    public static function randomizeCorrectPosition(array $options): array
+    {
+        $texts = array_map(fn($o) => $o['text'], $options);
+        $correctText = null;
+        foreach ($options as $o) {
+            if (! empty($o['is_correct'])) {
+                $correctText = $o['text'];
+                break;
+            }
+        }
+        if ($correctText === null) {
+            $correctText = $texts[0];
+        }
+
+        shuffle($texts);
+
+        $keys = ['A', 'B', 'C', 'D', 'E', 'F'];
+        $result = [];
+        foreach (array_slice($texts, 0, count($options)) as $i => $text) {
+            $result[] = [
+                'key' => $keys[$i],
+                'text' => $text,
+                'is_correct' => $text === $correctText,
+            ];
+        }
+
+        return $result;
+    }
+
+    private function generateFromMaterial(string $sourceText, int $count, string $questionType, string $difficulty): array
+    {
         $sentences = preg_split('/(?<=[.!?])\s+/', preg_replace('/\s+/', ' ', trim($sourceText)));
         $sentences = array_values(array_filter(array_map('trim', $sentences ?: []), fn($s) => mb_strlen($s) > 40));
 
@@ -55,11 +106,12 @@ class HeuristicFallbackGenerator implements QuestionGeneratorInterface
             foreach (['B', 'C', 'D'] as $idx => $key) {
                 $options[] = ['key' => $key, 'text' => $distractors[$idx] ?? "Alternative {$key}", 'is_correct' => false];
             }
+            $options = self::randomizeCorrectPosition($options);
 
             $points = $difficulty === 'easy' ? 5 : ($difficulty === 'hard' ? 10 : 7);
 
             $drafts[] = [
-                'question' => "Complete the statement ({$difficulty}): {$masked}",
+                'question' => $masked,
                 'type' => 'multiple_choice',
                 'points' => $points,
                 'explanation' => "Based on the material: \"{$sentence}\"",
