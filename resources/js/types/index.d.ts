@@ -26,6 +26,7 @@ export interface QuestionOption {
     question_id: number;
     key: string;
     text: string;
+    image_url?: string | null;
     is_correct: boolean;
     created_at: string;
     updated_at: string;
@@ -35,6 +36,7 @@ export interface Question {
     id: number;
     question_bank_id: number;
     question: string;
+    image_url?: string | null;
     type: 'multiple_choice' | 'essay';
     points: number;
     explanation: string | null;

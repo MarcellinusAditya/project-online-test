@@ -16,10 +16,13 @@ class Question extends Model
     protected $fillable = [
         'question_bank_id',
         'question',
+        'image_path',
         'type',
         'points',
         'explanation',
     ];
+
+    protected $appends = ['image_url'];
 
     protected function casts(): array
     {
@@ -27,6 +30,15 @@ class Question extends Model
             'type' => QuestionType::class,
             'points' => 'integer',
         ];
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (! $this->image_path) {
+            return null;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->image_path);
     }
 
     public function questionBank(): BelongsTo

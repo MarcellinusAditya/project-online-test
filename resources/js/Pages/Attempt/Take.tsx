@@ -1,15 +1,18 @@
+import Lightbox from '@/Components/Lightbox';
 import { Head, router } from '@inertiajs/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Question {
     id: number;
     question: string;
+    image_url: string | null;
     type: 'multiple_choice' | 'essay';
     points: number;
     options: {
         id: number;
         key: string;
         text: string;
+        image_url: string | null;
     }[];
     selected_option_id: number | null;
     answer_text: string | null;
@@ -47,6 +50,7 @@ export default function Take({ attempt, questions, current_question_index }: Tak
     const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
     const [warningCount, setWarningCount] = useState(0);
     const [lastWarning, setLastWarning] = useState<string | null>(null);
+    const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
     const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(
         typeof document !== 'undefined' &&
             !!document.documentElement?.requestFullscreen &&
@@ -380,6 +384,24 @@ export default function Take({ attempt, questions, current_question_index }: Tak
                             <p className="font-display-lg-mobile text-display-lg-mobile text-on-surface mb-8">
                                 {currentQuestion.question}
                             </p>
+                            {currentQuestion.image_url && (
+                                <button
+                                    type="button"
+                                    onClick={() => setLightboxSrc(currentQuestion.image_url)}
+                                    className="block mb-8 group relative rounded-xl overflow-hidden border border-outline-variant max-w-full"
+                                    title="Click to zoom"
+                                >
+                                    <img
+                                        src={currentQuestion.image_url}
+                                        alt={`Question ${currentIndex + 1} image`}
+                                        className="max-h-80 w-auto mx-auto object-contain"
+                                    />
+                                    <span className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/60 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <span className="material-symbols-outlined text-[14px]">zoom_in</span>
+                                        Zoom
+                                    </span>
+                                </button>
+                            )}
 
                             {/* MCQ Options */}
                             {currentQuestion.type === 'multiple_choice' && (
@@ -400,12 +422,28 @@ export default function Take({ attempt, questions, current_question_index }: Tak
                                                     name={`question_${currentQuestion.id}`}
                                                     checked={isSelected}
                                                     onChange={() => handleOptionSelect(option.id)}
-                                                    className="w-5 h-5 text-primary-container border-outline focus:ring-primary-container mr-4"
+                                                    className="w-5 h-5 text-primary-container border-outline focus:ring-primary-container mr-4 shrink-0"
                                                 />
-                                                <span className={`font-body-md text-body-md ${
-                                                    isSelected ? 'text-on-surface font-medium' : 'text-on-surface'
-                                                }`}>
-                                                    {option.text}
+                                                <span className="flex-1 min-w-0">
+                                                    {option.text && (
+                                                        <span className={`font-body-md text-body-md block ${
+                                                            isSelected ? 'text-on-surface font-medium' : 'text-on-surface'
+                                                        }`}>
+                                                            {option.text}
+                                                        </span>
+                                                    )}
+                                                    {option.image_url && (
+                                                        <img
+                                                            src={option.image_url}
+                                                            alt={`Option ${option.key} image`}
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                setLightboxSrc(option.image_url);
+                                                            }}
+                                                            className="mt-2 max-h-40 rounded-lg border border-outline-variant object-contain cursor-zoom-in hover:border-primary transition-colors"
+                                                        />
+                                                    )}
                                                 </span>
                                                 {isSelected && (
                                                     <span className="absolute right-4 text-primary-container material-symbols-outlined">
@@ -533,6 +571,7 @@ export default function Take({ attempt, questions, current_question_index }: Tak
                     </div>
                 </div>
             )}
+            <Lightbox src={lightboxSrc} alt="Zoomed question image" onClose={() => setLightboxSrc(null)} />
         </div>
     );
 }

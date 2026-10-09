@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -44,9 +45,14 @@ class QuestionController extends Controller
         Gate::authorize('update', $test);
 
         DB::transaction(function () use ($request, $test) {
+            $questionImagePath = $request->hasFile('question_image')
+                ? $request->file('question_image')->store('question-images', 'public')
+                : null;
+
             $question = $test->questions()->create([
                 'question_bank_id' => $this->getOrCreateQuestionBank($request->user(), $test),
-                'question' => $request->input('question'),
+                'question' => $request->input('question', ''),
+                'image_path' => $questionImagePath,
                 'type' => $request->input('type'),
                 'points' => $request->input('points'),
                 'explanation' => $request->input('explanation'),
@@ -54,11 +60,17 @@ class QuestionController extends Controller
 
             if ($request->input('type') === QuestionType::MULTIPLE_CHOICE->value) {
                 $correctIndex = $request->input('correct_option', 0);
+                $optionImages = $request->file('options', []);
 
                 foreach ($request->input('options', []) as $index => $option) {
+                    $imagePath = isset($optionImages[$index]['image']) && $optionImages[$index]['image'] instanceof \Illuminate\Http\UploadedFile
+                        ? $optionImages[$index]['image']->store('question-images', 'public')
+                        : null;
+
                     $question->options()->create([
                         'key' => $option['key'],
-                        'text' => $option['text'],
+                        'text' => $option['text'] ?? '',
+                        'image_path' => $imagePath,
                         'is_correct' => $index === $correctIndex,
                     ]);
                 }
@@ -91,25 +103,70 @@ class QuestionController extends Controller
         Gate::authorize('update', $test);
 
         DB::transaction(function () use ($request, $question) {
+            $imagePath = $question->image_path;
+
+            if ($request->boolean('remove_question_image') && $imagePath) {
+                Storage::disk('public')->delete($imagePath);
+                $imagePath = null;
+            }
+
+            if ($request->hasFile('question_image')) {
+                if ($imagePath) {
+                    Storage::disk('public')->delete($imagePath);
+                }
+                $imagePath = $request->file('question_image')->store('question-images', 'public');
+            }
+
             $question->update([
-                'question' => $request->input('question'),
+                'question' => $request->input('question', ''),
+                'image_path' => $imagePath,
                 'type' => $request->input('type'),
                 'points' => $request->input('points'),
                 'explanation' => $request->input('explanation'),
             ]);
 
-            $question->options()->delete();
+            $optionImages = $request->file('options', []);
+            $newOptionsData = [];
+            $keepPaths = [];
 
             if ($request->input('type') === QuestionType::MULTIPLE_CHOICE->value) {
-                $correctIndex = $request->input('correct_option', 0);
+                $correctIndex = (int) $request->input('correct_option', 0);
+                $oldByKey = $question->options->keyBy('key');
 
                 foreach ($request->input('options', []) as $index => $option) {
-                    $question->options()->create([
+                    $optImagePath = isset($oldByKey[$option['key']]) ? $oldByKey[$option['key']]->image_path : null;
+
+                    if (! empty($option['remove_image'])) {
+                        $optImagePath = null;
+                    }
+
+                    if (isset($optionImages[$index]['image']) && $optionImages[$index]['image'] instanceof \Illuminate\Http\UploadedFile) {
+                        $optImagePath = $optionImages[$index]['image']->store('question-images', 'public');
+                    }
+
+                    if ($optImagePath) {
+                        $keepPaths[] = $optImagePath;
+                    }
+
+                    $newOptionsData[] = [
                         'key' => $option['key'],
-                        'text' => $option['text'],
+                        'text' => $option['text'] ?? '',
+                        'image_path' => $optImagePath,
                         'is_correct' => $index === $correctIndex,
-                    ]);
+                    ];
                 }
+            }
+
+            // Delete old option image files that are no longer referenced.
+            foreach ($question->options as $oldOption) {
+                if ($oldOption->image_path && ! in_array($oldOption->image_path, $keepPaths, true)) {
+                    Storage::disk('public')->delete($oldOption->image_path);
+                }
+            }
+            $question->options()->delete();
+
+            foreach ($newOptionsData as $optionData) {
+                $question->options()->create($optionData);
             }
         });
 
@@ -120,6 +177,16 @@ class QuestionController extends Controller
     public function destroy(Request $request, Test $test, Question $question): RedirectResponse
     {
         Gate::authorize('update', $test);
+
+        if ($question->image_path) {
+            Storage::disk('public')->delete($question->image_path);
+        }
+
+        foreach ($question->options as $option) {
+            if ($option->image_path) {
+                Storage::disk('public')->delete($option->image_path);
+            }
+        }
 
         $question->delete();
 

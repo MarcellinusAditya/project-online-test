@@ -204,9 +204,12 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                                         <span className={`font-body-sm text-body-sm truncate ${
                                             selectedQuestionId === question.id ? 'text-on-surface font-medium' : 'text-on-surface-variant'
                                         }`}>
+                                            {question.image_url && (
+                                                <span className="material-symbols-outlined text-[14px] mr-1 align-[-2px] text-primary">image</span>
+                                            )}
                                             {question.question.length > 30
                                                 ? question.question.substring(0, 30) + '...'
-                                                : question.question}
+                                                : question.question || '(Image question)'}
                                         </span>
                                     </div>
                                     <span className={`material-symbols-outlined text-[16px] ${
@@ -285,6 +288,13 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                                             value={selectedQuestion.question}
                                             readOnly
                                         />
+                                        {selectedQuestion.image_url && (
+                                            <img
+                                                src={selectedQuestion.image_url}
+                                                alt="Question image"
+                                                className="mt-3 max-h-56 rounded-lg border border-outline-variant object-contain"
+                                            />
+                                        )}
                                     </div>
 
                                     {/* Answers Section - Only for MCQ */}
@@ -326,6 +336,13 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                                                             <span className="font-body-md text-on-surface">
                                                                 {option.text}
                                                             </span>
+                                                            {option.image_url && (
+                                                                <img
+                                                                    src={option.image_url}
+                                                                    alt={`Option ${option.key} image`}
+                                                                    className="mt-2 max-h-28 rounded-md border border-outline-variant object-contain"
+                                                                />
+                                                            )}
                                                         </div>
                                                         {option.is_correct && (
                                                             <div className="flex items-center gap-2">

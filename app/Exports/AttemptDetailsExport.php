@@ -51,9 +51,12 @@ class AttemptDetailsExport implements FromCollection, WithHeadings, WithMapping,
             'Participant Name',
             'Participant ID',
             'Question',
+            'Question Image URL',
             'Question Type',
             'Participant Answer',
+            'Participant Answer Image URL',
             'Correct Answer',
+            'Correct Answer Image URL',
             'Is Correct',
             'Points Awarded',
             'Max Points',
@@ -75,13 +78,17 @@ class AttemptDetailsExport implements FromCollection, WithHeadings, WithMapping,
             $participantAnswer = $answer->questionOption
                 ? "[{$answer->questionOption->key}] {$answer->questionOption->text}"
                 : '-';
+            $participantAnswerImage = $answer->questionOption?->image_url;
             $correctOption = $question->options->firstWhere('is_correct', true);
             $correctAnswer = $correctOption
                 ? "[{$correctOption->key}] {$correctOption->text}"
                 : '-';
+            $correctAnswerImage = $correctOption?->image_url;
         } else {
             $participantAnswer = $answer->answer_text ?? '-';
+            $participantAnswerImage = null;
             $correctAnswer = '-';
+            $correctAnswerImage = null;
         }
 
         $maxPoints = $row['max_points'];
@@ -90,9 +97,12 @@ class AttemptDetailsExport implements FromCollection, WithHeadings, WithMapping,
             $attempt->participant_name,
             $attempt->participant_identifier,
             $question->question,
+            $question->image_url,
             $question->type->value ?? (string) $question->type,
             $participantAnswer,
+            $participantAnswerImage,
             $correctAnswer,
+            $correctAnswerImage,
             $answer->is_correct === null ? 'Pending' : ($answer->is_correct ? 'Yes' : 'No'),
             $answer->points_awarded,
             $maxPoints,

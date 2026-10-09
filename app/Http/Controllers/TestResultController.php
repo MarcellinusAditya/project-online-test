@@ -91,6 +91,7 @@ class TestResultController extends Controller
                 'id' => $answer->id,
                 'question_id' => $question->id,
                 'question' => $question->question,
+                'question_image_url' => $question->image_url,
                 'type' => $question->type->value ?? $question->type,
                 'max_points' => $maxPoints,
                 'points_awarded' => $answer->points_awarded,
@@ -105,6 +106,7 @@ class TestResultController extends Controller
                     'id' => $opt->id,
                     'key' => $opt->key,
                     'text' => $opt->text,
+                    'image_url' => $opt->image_url,
                     'is_correct' => $opt->is_correct,
                 ]),
             ];
