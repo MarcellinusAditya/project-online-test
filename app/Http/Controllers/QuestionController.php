@@ -223,6 +223,78 @@ class QuestionController extends Controller
             ->with('success', 'Question order updated successfully.');
     }
 
+    public function import(Request $request, Test $test): RedirectResponse
+    {
+        Gate::authorize('update', $test);
+
+        $validated = $request->validate([
+            'question_ids' => 'required|array|min:1',
+            'question_ids.*' => 'integer|exists:questions,id',
+        ]);
+
+        $ownedIds = $request->user()->questionBanks()
+            ->with('questions:id,question_bank_id')
+            ->get()
+            ->flatMap(fn($bank) => $bank->questions->pluck('id'))
+            ->all();
+
+        foreach ($validated['question_ids'] as $qid) {
+            abort_unless(in_array($qid, $ownedIds, true), 422, 'One or more questions do not belong to you.');
+        }
+
+        DB::transaction(function () use ($request, $test, $validated) {
+            $maxOrder = $test->questions()->max('test_questions.sort_order') ?? 0;
+
+            $sources = Question::with('options')->whereIn('id', $validated['question_ids'])->get();
+
+            foreach ($validated['question_ids'] as $qid) {
+                $source = $sources->firstWhere('id', $qid);
+                if (! $source) {
+                    continue;
+                }
+
+                $clone = $test->questions()->create([
+                    'question_bank_id' => $source->question_bank_id,
+                    'question' => $source->question,
+                    'image_path' => self::copyPublicFile($source->image_path),
+                    'type' => $source->type->value,
+                    'points' => $source->points,
+                    'explanation' => $source->explanation,
+                ]);
+
+                foreach ($source->options as $opt) {
+                    $clone->options()->create([
+                        'key' => $opt->key,
+                        'text' => $opt->text,
+                        'image_path' => self::copyPublicFile($opt->image_path),
+                        'is_correct' => $opt->is_correct,
+                    ]);
+                }
+
+                $maxOrder++;
+                $test->questions()->updateExistingPivot($clone->id, ['sort_order' => $maxOrder]);
+            }
+        });
+
+        $count = count($validated['question_ids']);
+
+        return redirect()->route('tests.questions.index', $test)
+            ->with('success', "{$count} question(s) added from the bank.");
+    }
+
+    private static function copyPublicFile(?string $path): ?string
+    {
+        if (! $path || ! Storage::disk('public')->exists($path)) {
+            return null;
+        }
+
+        $dir = pathinfo($path, PATHINFO_DIRNAME);
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $newPath = ($dir && $dir !== '.' ? $dir.'/' : '').\Illuminate\Support\Str::random(40).($ext ? '.'.$ext : '');
+
+        return Storage::disk('public')->copy($path, $newPath) ? $newPath : null;
+    }
+
     private function getOrCreateQuestionBank($user, Test $test): int
     {
         $bank = $user->questionBanks()
