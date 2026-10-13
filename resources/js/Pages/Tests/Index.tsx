@@ -1,6 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Test } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
+import { useEffect, useRef, useState } from 'react';
 
 interface TestWithCount extends Test {
     questions_count: number;
@@ -16,9 +17,50 @@ interface PaginatedTests {
 
 interface TestsIndexProps {
     tests: PaginatedTests;
+    filters: {
+        search?: string | null;
+        status?: string;
+    };
 }
 
-export default function TestsIndex({ tests }: TestsIndexProps) {
+const statusTabs = [
+    { key: 'all', label: 'All' },
+    { key: 'published', label: 'Published' },
+    { key: 'draft', label: 'Drafts' },
+    { key: 'archived', label: 'Archived' },
+] as const;
+
+export default function TestsIndex({ tests, filters }: TestsIndexProps) {
+    const [search, setSearch] = useState(filters.search ?? '');
+    const activeStatus = filters.status ?? 'all';
+    const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const applyFilters = (nextSearch: string, nextStatus: string) => {
+        router.get(
+            route('tests.index'),
+            { search: nextSearch, status: nextStatus },
+            { preserveState: true, replace: true }
+        );
+    };
+
+    const handleSearchChange = (value: string) => {
+        setSearch(value);
+        if (searchTimer.current) clearTimeout(searchTimer.current);
+        searchTimer.current = setTimeout(() => {
+            applyFilters(value, activeStatus);
+        }, 400);
+    };
+
+    const handleStatusChange = (status: string) => {
+        applyFilters(search, status);
+    };
+
+    useEffect(() => {
+        return () => {
+            if (searchTimer.current) clearTimeout(searchTimer.current);
+        };
+    }, []);
+
     const handleDelete = (test: TestWithCount) => {
         if (confirm(`Are you sure you want to delete "${test.title}"?`)) {
             router.delete(route('tests.destroy', test.id));
@@ -44,16 +86,27 @@ export default function TestsIndex({ tests }: TestsIndexProps) {
                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
                         <input
                             type="text"
+                            value={search}
+                            onChange={(e) => handleSearchChange(e.target.value)}
                             placeholder="Search tests by title or keyword..."
                             className="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg text-body-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-on-surface placeholder-on-surface-variant/60"
                         />
                     </div>
                     <div className="flex items-center gap-3 w-full md:w-auto overflow-x-auto">
                         <div className="flex p-1 bg-surface-container-high rounded-lg whitespace-nowrap text-body-sm shrink-0">
-                            <button className="px-3 py-1.5 bg-surface rounded-md shadow-sm text-primary font-medium border border-outline-variant/20">All</button>
-                            <button className="px-3 py-1.5 text-on-surface-variant hover:text-on-surface font-medium transition-colors">Published</button>
-                            <button className="px-3 py-1.5 text-on-surface-variant hover:text-on-surface font-medium transition-colors">Drafts</button>
-                            <button className="px-3 py-1.5 text-on-surface-variant hover:text-on-surface font-medium transition-colors">Archived</button>
+                            {statusTabs.map((tab) => (
+                                <button
+                                    key={tab.key}
+                                    onClick={() => handleStatusChange(tab.key)}
+                                    className={
+                                        activeStatus === tab.key
+                                            ? 'px-3 py-1.5 bg-surface rounded-md shadow-sm text-primary font-medium border border-outline-variant/20'
+                                            : 'px-3 py-1.5 text-on-surface-variant hover:text-on-surface font-medium transition-colors'
+                                    }
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -200,7 +253,7 @@ export default function TestsIndex({ tests }: TestsIndexProps) {
                         <div className="flex gap-2">
                             {tests.current_page > 1 && (
                                 <Link
-                                    href={route('tests.index', { page: tests.current_page - 1 })}
+                                    href={route('tests.index', { page: tests.current_page - 1, search, status: activeStatus })}
                                     className="px-3 py-1.5 text-sm font-medium text-on-surface-variant bg-surface border border-outline-variant rounded-md hover:bg-surface-container transition-colors"
                                 >
                                     Previous
@@ -208,7 +261,7 @@ export default function TestsIndex({ tests }: TestsIndexProps) {
                             )}
                             {tests.current_page < tests.last_page && (
                                 <Link
-                                    href={route('tests.index', { page: tests.current_page + 1 })}
+                                    href={route('tests.index', { page: tests.current_page + 1, search, status: activeStatus })}
                                     className="px-3 py-1.5 text-sm font-medium text-on-surface-variant bg-surface border border-outline-variant rounded-md hover:bg-surface-container transition-colors"
                                 >
                                     Next
