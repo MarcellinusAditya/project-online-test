@@ -1,11 +1,18 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Test } from '@/types';
 import { Head, Link } from '@inertiajs/react';
+
+interface RecentTest extends Test {
+    questions_count: number;
+    attempts_count: number;
+}
 
 interface DashboardProps {
     totalTests: number;
     publishedTests: number;
     totalParticipants: number;
     averageScore: number;
+    recentTests: RecentTest[];
 }
 
 export default function Dashboard({
@@ -13,6 +20,7 @@ export default function Dashboard({
     publishedTests = 0,
     totalParticipants = 0,
     averageScore = 0,
+    recentTests = [],
 }: DashboardProps) {
     return (
         <AuthenticatedLayout
@@ -117,9 +125,9 @@ export default function Dashboard({
                             </tr>
                         </thead>
                         <tbody className="text-body-sm divide-y divide-outline-variant/40">
-                            <tr className="hover:bg-surface-container-low/50 transition-colors">
-                                <td colSpan={5} className="px-5 md:px-6 py-8 text-center text-on-surface-variant">
-                                    {totalTests === 0 ? (
+                            {recentTests.length === 0 ? (
+                                <tr className="hover:bg-surface-container-low/50 transition-colors">
+                                    <td colSpan={5} className="px-5 md:px-6 py-8 text-center text-on-surface-variant">
                                         <div>
                                             <p>No tests yet.</p>
                                             <Link
@@ -129,11 +137,52 @@ export default function Dashboard({
                                                 Create your first test
                                             </Link>
                                         </div>
-                                    ) : (
-                                        'Loading...'
-                                    )}
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            ) : (
+                                recentTests.map((test) => (
+                                    <tr key={test.id} className="hover:bg-surface-container-low/50 transition-colors">
+                                        <td className="px-5 md:px-6 py-4">
+                                            <Link
+                                                href={route('tests.show', test.id)}
+                                                className="font-medium text-on-surface hover:text-primary transition-colors"
+                                            >
+                                                {test.title}
+                                            </Link>
+                                            <div className="text-xs text-on-surface-variant mt-0.5">
+                                                {test.attempts_count} participant{test.attempts_count === 1 ? '' : 's'}
+                                            </div>
+                                        </td>
+                                        <td className="px-5 md:px-6 py-4">
+                                            <span
+                                                className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium uppercase ${
+                                                    test.status === 'published'
+                                                        ? 'bg-green-100 text-green-800'
+                                                        : test.status === 'archived'
+                                                          ? 'bg-red-100 text-red-800'
+                                                          : 'bg-gray-100 text-gray-700'
+                                                }`}
+                                            >
+                                                {test.status}
+                                            </span>
+                                        </td>
+                                        <td className="px-5 md:px-6 py-4 text-on-surface-variant">
+                                            {test.questions_count} questions
+                                        </td>
+                                        <td className="px-5 md:px-6 py-4 text-on-surface-variant">
+                                            {test.start_at ? new Date(test.start_at).toLocaleDateString() : 'Not scheduled'}
+                                        </td>
+                                        <td className="px-5 md:px-6 py-4 text-right">
+                                            <Link
+                                                href={route('tests.show', test.id)}
+                                                className="text-primary hover:underline font-medium"
+                                            >
+                                                View
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>

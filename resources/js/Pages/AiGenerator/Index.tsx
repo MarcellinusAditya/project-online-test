@@ -120,12 +120,12 @@ export default function AiGeneratorIndex({ generations, tests, aiConfigured }: I
                     </div>
                     <div>
                         <label className="block font-body-sm font-medium text-on-surface mb-2">
-                            Number of questions (1–20)
+                            Number of questions (min 1)
                         </label>
                         <input
                             type="number"
                             min={1}
-                            max={20}
+                            max={100}
                             value={data.question_count}
                             onChange={(e) => setData('question_count', parseInt(e.target.value) || 5)}
                             className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-2.5 text-body-sm"

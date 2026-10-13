@@ -41,7 +41,7 @@ class AiGeneratorController extends Controller
         $validated = $request->validate([
             'source_file' => 'required|file|mimes:pdf,txt|max:10240',
             'test_id' => 'nullable|integer|exists:tests,id',
-            'question_count' => 'required|integer|min:1|max:20',
+            'question_count' => 'required|integer|min:1|max:100',
             'question_type' => 'required|string|in:multiple_choice,essay',
             'difficulty' => 'required|string|in:easy,medium,hard',
         ]);

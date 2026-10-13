@@ -15,14 +15,31 @@ class TestController extends Controller
 {
     public function index(Request $request): Response
     {
+        $validated = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+            'status' => ['nullable', 'string', 'in:all,draft,published,archived'],
+        ]);
+
+        $search = $validated['search'] ?? null;
+        $status = $validated['status'] ?? 'all';
+
         $tests = $request->user()
             ->tests()
             ->withCount('questions')
+            ->when($search, fn($q) => $q->where(fn($qq) => $qq
+                ->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")))
+            ->when($status !== 'all', fn($q) => $q->where('status', $status))
             ->latest()
-            ->paginate(12);
+            ->paginate(12)
+            ->withQueryString();
 
         return Inertia::render('Tests/Index', [
             'tests' => $tests,
+            'filters' => [
+                'search' => $search,
+                'status' => $status,
+            ],
         ]);
     }
 
