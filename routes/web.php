@@ -5,6 +5,7 @@ use App\Http\Controllers\AttemptController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JoinController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestResultController;
@@ -32,6 +33,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('tests.questions', QuestionController::class)->except(['show']);
     Route::post('tests/{test}/questions/reorder', [QuestionController::class, 'reorder'])->name('tests.questions.reorder');
+    Route::post('tests/{test}/questions/import', [QuestionController::class, 'import'])->name('tests.questions.import');
+
+    Route::resource('question-banks', QuestionBankController::class);
 
     Route::get('tests/{test}/results', [TestResultController::class, 'index'])->name('tests.results.index');
     Route::get('tests/{test}/attempts/{attempt}', [TestResultController::class, 'show'])->name('tests.attempts.show');

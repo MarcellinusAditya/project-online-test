@@ -158,12 +158,21 @@ export default function QuestionsIndex({ test, questions }: QuestionsIndexProps)
                 <aside className="w-[280px] bg-surface border-r border-outline-variant flex flex-col shrink-0">
                     <div className="p-4 border-b border-outline-variant flex items-center justify-between bg-surface-bright">
                         <h3 className="font-title-sm text-title-sm text-on-surface">Questions</h3>
-                        <Link
-                            href={route('tests.questions.create', test.id)}
-                            className="flex items-center gap-1 text-primary hover:text-primary-fixed-dim transition-colors font-body-sm font-medium"
-                        >
+                        <div className="flex items-center gap-2">
+                            <Link
+                                href={route('question-banks.index')}
+                                className="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors font-body-sm font-medium"
+                                title="Add questions from a bank"
+                            >
+                                <span className="material-symbols-outlined text-[18px]">library_add</span> From Bank
+                            </Link>
+                            <Link
+                                href={route('tests.questions.create', test.id)}
+                                className="flex items-center gap-1 text-primary hover:text-primary-fixed-dim transition-colors font-body-sm font-medium"
+                            >
                             <span className="material-symbols-outlined text-[18px]">add</span> Add
-                        </Link>
+                            </Link>
+                        </div>
                     </div>
                     <div className="flex-1 overflow-y-auto p-2 space-y-1">
                         {orderedQuestions.length === 0 ? (

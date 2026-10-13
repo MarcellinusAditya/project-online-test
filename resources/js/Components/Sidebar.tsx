@@ -8,7 +8,7 @@ interface SidebarProps {
 const navigation = [
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
     { name: 'Tests', href: 'tests.index', icon: 'quiz' },
-    { name: 'Question Bank', href: '#', icon: 'database' },
+    { name: 'Question Bank', href: 'question-banks.index', icon: 'database' },
     { name: 'AI Generator', href: 'ai-generator.index', icon: 'psychology' },
     { name: 'Results', href: '#', icon: 'analytics' },
     { name: 'Settings', href: '#', icon: 'settings' },
@@ -27,6 +27,9 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         }
         if (href === 'tests.index') {
             return url.startsWith('/tests');
+        }
+        if (href === 'question-banks.index') {
+            return url.startsWith('/question-banks');
         }
         if (href === 'ai-generator.index') {
             return url.startsWith('/ai-generator');
