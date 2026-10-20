@@ -381,7 +381,7 @@ Dashboard hasil global, statistik per test yang lengkap, dan export yang bisa di
 
 ## Phase 11 — Settings
 
-**Status: berikutnya**
+**Status: selesai (20 Oktober 2026, `feature/phase-11-settings`)**
 
 ### Goal
 Preferensi user, default test, dan integrasi.
@@ -395,9 +395,13 @@ Preferensi user, default test, dan integrasi.
 6. **Danger Zone** — hapus akun, export data
 
 ### Deliverables
-- [ ] Settings pages working
-- [ ] Test defaults applied on create
-- [ ] Notification preferences saved
+- [x] Settings pages working
+- [x] Test defaults applied on create
+- [x] Notification preferences saved
+- [x] Appearance (light/dark/system) applied app-wide
+- [x] Webhook + summary email integration
+
+**Ditunda ke Phase 12:** API key management (Sanctum) dan language id/en.
 
 ---
 
@@ -424,7 +428,7 @@ Phase 9: Question Bank (Reusable Library)  ✅
     ↓
 Phase 10: Results Enhancement  ✅
     ↓
-Phase 11: Settings  ← next
+Phase 11: Settings  ✅
 ```
 
 ## Key Principles

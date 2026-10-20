@@ -43,17 +43,27 @@ class TestController extends Controller
         ]);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        return Inertia::render('Tests/Create');
+        $settings = $request->user()->settingsOrDefault();
+
+        return Inertia::render('Tests/Create', [
+            'defaults' => [
+                'duration_minutes' => $settings->default_duration_minutes,
+                'passing_score' => $settings->default_passing_score,
+                'show_result' => $settings->default_show_result,
+            ],
+        ]);
     }
 
     public function store(TestRequest $request): RedirectResponse
     {
+        $settings = $request->user()->settingsOrDefault();
+
         $test = $request->user()->tests()->create([
             ...$request->validated(),
             'token' => Test::generateToken(),
-            'status' => TestStatus::DRAFT,
+            'status' => $settings->auto_publish ? TestStatus::PUBLISHED : TestStatus::DRAFT,
         ]);
 
         return redirect()->route('tests.show', $test)

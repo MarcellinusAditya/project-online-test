@@ -1,15 +1,15 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function TestsCreate() {
+export default function TestsCreate({ defaults }: { defaults?: { duration_minutes: number; passing_score: number; show_result: boolean } }) {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
         description: '',
         start_at: '',
         end_at: '',
-        duration_minutes: 60,
-        show_result: true,
-        passing_score: 70,
+        duration_minutes: defaults?.duration_minutes ?? 60,
+        show_result: defaults?.show_result ?? true,
+        passing_score: defaults?.passing_score ?? 70,
     });
 
     const submit = (e: React.FormEvent) => {

@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -23,7 +24,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar_path',
     ];
+
+    protected $appends = ['avatar_url'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -51,6 +55,32 @@ class User extends Authenticatable
     public function tests(): HasMany
     {
         return $this->hasMany(Test::class);
+    }
+
+    public function settings(): HasOne
+    {
+        return $this->hasOne(UserSetting::class);
+    }
+
+    /**
+     * Settings row with defaults applied, creating the row on first access.
+     */
+    public function settingsOrDefault(): UserSetting
+    {
+        $settings = $this->settings()->firstOrCreate([]);
+
+        // Database-level defaults are not hydrated on a freshly inserted model,
+        // so reload once when the row was just created.
+        return $settings->wasRecentlyCreated ? $settings->refresh() : $settings;
+    }
+
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (! $this->avatar_path) {
+            return null;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->avatar_path);
     }
 
     public function questionBanks(): HasMany

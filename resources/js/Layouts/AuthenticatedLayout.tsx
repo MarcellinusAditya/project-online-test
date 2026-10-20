@@ -54,8 +54,12 @@ export default function Authenticated({
                     </button>
                     <div className="relative ml-1 sm:ml-2">
                         <Link href={route('profile.edit')} className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-sm font-medium">
-                                {user.name.charAt(0).toUpperCase()}
+                            <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-sm font-medium overflow-hidden">
+                                {user.avatar_url ? (
+                                    <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    user.name.charAt(0).toUpperCase()
+                                )}
                             </div>
                         </Link>
                     </div>

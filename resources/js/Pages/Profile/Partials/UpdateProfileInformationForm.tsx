@@ -32,11 +32,11 @@ export default function UpdateProfileInformation({
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">
+                <h2 className="text-title-sm font-semibold text-on-surface">
                     Profile Information
                 </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-body-sm text-on-surface-variant">
                     Update your account's profile information and email address.
                 </p>
             </header>
@@ -76,7 +76,7 @@ export default function UpdateProfileInformation({
 
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>
-                        <p className="mt-2 text-sm text-gray-800">
+                        <p className="mt-2 text-body-sm text-on-surface">
                             Your email address is unverified.
                             <Link
                                 href={route('verification.send')}
@@ -107,7 +107,7 @@ export default function UpdateProfileInformation({
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-600">
+                        <p className="text-body-sm text-on-surface-variant">
                             Saved.
                         </p>
                     </Transition>

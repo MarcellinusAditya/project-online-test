@@ -139,6 +139,8 @@ class AttemptController extends Controller
 
         $this->gradeAttempt($attempt);
 
+        \App\Jobs\SendResultsWebhook::dispatch($attempt->fresh());
+
         return redirect()->route('attempt.result', $attempt->id);
     }
 

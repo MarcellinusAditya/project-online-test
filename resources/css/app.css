@@ -1,3 +1,115 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Colour tokens live as RGB channels so Tailwind can compose opacity
+ * (e.g. bg-surface/80). Light values below, dark overrides in .dark.
+ */
+:root {
+    --color-primary: 53 37 205;
+    --color-primary-container: 79 70 229;
+    --color-on-primary: 255 255 255;
+    --color-primary-fixed: 226 223 255;
+    --color-primary-fixed-dim: 195 192 255;
+    --color-on-primary-container: 218 215 255;
+    --color-on-primary-fixed: 15 0 105;
+    --color-on-primary-fixed-variant: 51 35 204;
+    --color-inverse-primary: 195 192 255;
+    --color-surface: 249 249 255;
+    --color-surface-dim: 211 218 234;
+    --color-surface-bright: 249 249 255;
+    --color-surface-container-lowest: 255 255 255;
+    --color-surface-container-low: 240 243 255;
+    --color-surface-container: 231 238 254;
+    --color-surface-container-high: 226 232 248;
+    --color-surface-container-highest: 220 226 243;
+    --color-surface-variant: 220 226 243;
+    --color-surface-tint: 77 68 227;
+    --color-on-surface: 21 28 39;
+    --color-on-surface-variant: 70 69 85;
+    --color-on-background: 21 28 39;
+    --color-inverse-surface: 42 49 61;
+    --color-inverse-on-surface: 235 241 255;
+    --color-background: 249 249 255;
+    --color-secondary: 87 94 112;
+    --color-secondary-container: 217 223 245;
+    --color-on-secondary: 255 255 255;
+    --color-on-secondary-fixed: 20 27 43;
+    --color-on-secondary-fixed-variant: 64 71 88;
+    --color-on-secondary-container: 92 98 116;
+    --color-secondary-fixed: 220 226 247;
+    --color-secondary-fixed-dim: 192 198 219;
+    --color-outline: 119 117 135;
+    --color-outline-variant: 199 196 216;
+    --color-error: 186 26 26;
+    --color-error-container: 255 218 214;
+    --color-on-error: 255 255 255;
+    --color-on-error-container: 147 0 10;
+    --color-tertiary: 126 48 0;
+    --color-tertiary-container: 164 65 0;
+    --color-on-tertiary: 255 255 255;
+    --color-on-tertiary-fixed: 53 16 0;
+    --color-on-tertiary-container: 255 210 190;
+    --color-tertiary-fixed: 255 219 204;
+    --color-tertiary-fixed-dim: 255 182 149;
+    --color-on-tertiary-fixed-variant: 123 47 0;
+
+    color-scheme: light;
+}
+
+.dark {
+    --color-primary: 195 192 255;
+    --color-primary-container: 79 70 229;
+    --color-on-primary: 255 255 255;
+    --color-primary-fixed: 226 223 255;
+    --color-primary-fixed-dim: 195 192 255;
+    --color-on-primary-container: 15 0 105;
+    --color-on-primary-fixed: 226 223 255;
+    --color-on-primary-fixed-variant: 195 192 255;
+    --color-inverse-primary: 53 37 205;
+    --color-surface: 17 19 24;
+    --color-surface-dim: 17 19 24;
+    --color-surface-bright: 55 57 62;
+    --color-surface-container-lowest: 23 26 33;
+    --color-surface-container-low: 27 30 38;
+    --color-surface-container: 31 35 44;
+    --color-surface-container-high: 38 42 52;
+    --color-surface-container-highest: 48 52 63;
+    --color-surface-variant: 48 52 63;
+    --color-surface-tint: 195 192 255;
+    --color-on-surface: 228 225 236;
+    --color-on-surface-variant: 200 197 212;
+    --color-on-background: 228 225 236;
+    --color-inverse-surface: 228 225 236;
+    --color-inverse-on-surface: 45 48 56;
+    --color-background: 17 19 24;
+    --color-secondary: 192 198 219;
+    --color-secondary-container: 60 66 87;
+    --color-on-secondary: 255 255 255;
+    --color-on-secondary-fixed: 20 27 43;
+    --color-on-secondary-fixed-variant: 220 226 247;
+    --color-on-secondary-container: 220 226 247;
+    --color-secondary-fixed: 220 226 247;
+    --color-secondary-fixed-dim: 192 198 219;
+    --color-outline: 146 143 160;
+    --color-outline-variant: 70 69 82;
+    --color-error: 255 180 171;
+    --color-error-container: 147 0 10;
+    --color-on-error: 105 0 5;
+    --color-on-error-container: 255 218 214;
+    --color-tertiary: 255 182 149;
+    --color-tertiary-container: 123 47 0;
+    --color-on-tertiary: 53 16 0;
+    --color-on-tertiary-fixed: 53 16 0;
+    --color-on-tertiary-container: 255 219 204;
+    --color-tertiary-fixed: 255 219 204;
+    --color-tertiary-fixed-dim: 255 182 149;
+    --color-on-tertiary-fixed-variant: 123 47 0;
+
+    color-scheme: dark;
+}
+
+body {
+    @apply bg-background text-on-surface;
+}

@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResultsController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestResultController;
 use Illuminate\Foundation\Application;
@@ -39,6 +40,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('question-banks', QuestionBankController::class);
 
     Route::get('results', [ResultsController::class, 'index'])->name('results.index');
+
+    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile');
+    Route::delete('settings/avatar', [SettingsController::class, 'removeAvatar'])->name('settings.avatar.destroy');
+    Route::patch('settings/test-defaults', [SettingsController::class, 'updateTestDefaults'])->name('settings.test-defaults');
+    Route::patch('settings/appearance', [SettingsController::class, 'updateAppearance'])->name('settings.appearance');
+    Route::patch('settings/notifications', [SettingsController::class, 'updateNotifications'])->name('settings.notifications');
+    Route::patch('settings/integrations', [SettingsController::class, 'updateIntegrations'])->name('settings.integrations');
+    Route::delete('settings/account', [SettingsController::class, 'destroy'])->name('settings.account.destroy');
 
     Route::get('tests/{test}/results', [TestResultController::class, 'index'])->name('tests.results.index');
     Route::get('tests/{test}/attempts/{attempt}', [TestResultController::class, 'show'])->name('tests.attempts.show');

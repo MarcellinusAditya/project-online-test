@@ -11,7 +11,7 @@ const navigation = [
     { name: 'Question Bank', href: 'question-banks.index', icon: 'database' },
     { name: 'AI Generator', href: 'ai-generator.index', icon: 'psychology' },
     { name: 'Results', href: 'results.index', icon: 'analytics' },
-    { name: 'Settings', href: '#', icon: 'settings' },
+    { name: 'Settings', href: 'settings.index', icon: 'settings' },
 ];
 
 const bottomNavigation = [
@@ -36,6 +36,9 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         }
         if (href === 'results.index') {
             return url.startsWith('/results');
+        }
+        if (href === 'settings.index') {
+            return url.startsWith('/settings') || url.startsWith('/profile');
         }
         return false;
     };
