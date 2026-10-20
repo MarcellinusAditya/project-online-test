@@ -1,44 +1,50 @@
 import '../css/app.css';
 import './bootstrap';
 
-import { createInertiaApp, usePage } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 type Theme = 'light' | 'dark' | 'system';
 
-function applyTheme(theme: Theme) {
+let currentTheme: Theme = 'system';
+
+function applyTheme() {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const shouldUseDark = theme === 'dark' || (theme === 'system' && prefersDark);
+    const shouldUseDark = currentTheme === 'dark' || (currentTheme === 'system' && prefersDark);
 
     document.documentElement.classList.toggle('dark', shouldUseDark);
 }
 
+function syncTheme(props: unknown) {
+    const theme = (props as { theme?: Theme } | undefined)?.theme;
+
+    if (theme === 'light' || theme === 'dark' || theme === 'system') {
+        currentTheme = theme;
+    }
+
+    applyTheme();
+}
+
 /**
- * Keeps <html class="dark"> in sync with the saved theme after Inertia
- * navigations (the inline script in app.blade.php only covers first paint).
+ * Theme is applied outside React on purpose: calling usePage() before the
+ * Inertia <App> provider mounts throws "usePage must be used within an
+ * Inertia component" and blanks the whole app.
  */
-function ThemeSync() {
-    const theme = ((usePage().props as { theme?: Theme }).theme ?? 'system') as Theme;
+function initThemeSync(initialProps: unknown) {
+    syncTheme(initialProps);
 
-    useEffect(() => {
-        applyTheme(theme);
+    router.on('navigate', (event) => {
+        syncTheme(event.detail.page.props);
+    });
 
-        if (theme !== 'system') {
-            return;
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (currentTheme === 'system') {
+            applyTheme();
         }
-
-        const media = window.matchMedia('(prefers-color-scheme: dark)');
-        const onChange = () => applyTheme('system');
-
-        media.addEventListener('change', onChange);
-        return () => media.removeEventListener('change', onChange);
-    }, [theme]);
-
-    return null;
+    });
 }
 
 createInertiaApp({
@@ -49,14 +55,11 @@ createInertiaApp({
             import.meta.glob('./Pages/**/*.tsx'),
         ),
     setup({ el, App, props }) {
+        initThemeSync(props.initialPage.props);
+
         const root = createRoot(el);
 
-        root.render(
-            <>
-                <ThemeSync />
-                <App {...props} />
-            </>,
-        );
+        root.render(<App {...props} />);
     },
     progress: {
         color: '#4B5563',
