@@ -160,7 +160,7 @@ export default function Dashboard({
                                                         ? 'bg-green-100 text-green-800'
                                                         : test.status === 'archived'
                                                           ? 'bg-red-100 text-red-800'
-                                                          : 'bg-gray-100 text-gray-700'
+                                                          : 'bg-surface-container-high text-on-surface-variant'
                                                 }`}
                                             >
                                                 {test.status}

@@ -94,6 +94,12 @@ class JoinController extends Controller
 
         \App\Models\AttemptEvent::log($attempt, \App\Enums\AttemptEventType::TEST_STARTED);
 
+        $ownerSettings = $test->user?->settingsOrDefault();
+
+        if ($ownerSettings?->notify_new_attempt && $test->user) {
+            $test->user->notify(new \App\Notifications\NewAttemptNotification($attempt));
+        }
+
         return redirect()->route('attempt.show', $attempt->id);
     }
 }

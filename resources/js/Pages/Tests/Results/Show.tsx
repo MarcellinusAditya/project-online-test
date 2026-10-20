@@ -260,7 +260,7 @@ export default function ResultsShow({ test, attempt, answers, events = [] }: Sho
                                                     )}
                                                 </span>
                                                 {isSelected && (
-                                                    <span className="text-xs font-semibold uppercase px-2 py-0.5 rounded bg-white/80 shadow-xs">
+                                                    <span className="text-xs font-semibold uppercase px-2 py-0.5 rounded bg-surface-container-lowest/90 shadow-xs">
                                                         Selected Answer
                                                     </span>
                                                 )}

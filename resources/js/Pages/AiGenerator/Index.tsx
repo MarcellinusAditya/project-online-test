@@ -210,7 +210,7 @@ export default function AiGeneratorIndex({ generations, tests, aiConfigured }: I
                                         </td>
                                         <td className="px-6 py-4">
                                             <span
-                                                className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium uppercase ${statusStyle[g.status] ?? 'bg-gray-100 text-gray-700'}`}
+                                                className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium uppercase ${statusStyle[g.status] ?? 'bg-surface-container-high text-on-surface-variant'}`}
                                             >
                                                 {g.status}
                                             </span>
