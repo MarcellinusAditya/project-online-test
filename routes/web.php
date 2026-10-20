@@ -7,6 +7,7 @@ use App\Http\Controllers\JoinController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestResultController;
 use Illuminate\Foundation\Application;
@@ -36,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::post('tests/{test}/questions/import', [QuestionController::class, 'import'])->name('tests.questions.import');
 
     Route::resource('question-banks', QuestionBankController::class);
+
+    Route::get('results', [ResultsController::class, 'index'])->name('results.index');
 
     Route::get('tests/{test}/results', [TestResultController::class, 'index'])->name('tests.results.index');
     Route::get('tests/{test}/attempts/{attempt}', [TestResultController::class, 'show'])->name('tests.attempts.show');

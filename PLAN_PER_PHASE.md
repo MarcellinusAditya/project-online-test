@@ -33,10 +33,10 @@ Setup project infrastructure dan development environment.
    - Setup Git hooks
 
 ### Deliverables
-- [ ] Laravel project running
-- [ ] React + Inertia working
-- [ ] Authentication functional
-- [ ] Base layouts ready
+- [x] Laravel project running
+- [x] React + Inertia working
+- [x] Authentication functional
+- [x] Base layouts ready
 
 ---
 
@@ -73,9 +73,9 @@ Provider bisa membuat, mengelola, dan publish test.
    - Validate test sebelum publish
 
 ### Deliverables
-- [ ] Test CRUD functional
-- [ ] Token generation working
-- [ ] Authorization policies active
+- [x] Test CRUD functional
+- [x] Token generation working
+- [x] Authorization policies active
 
 ---
 
@@ -116,9 +116,9 @@ Provider bisa membuat dan mengelola soal.
    - Custom points per test (optional)
 
 ### Deliverables
-- [ ] Question CRUD working
-- [ ] Question bank functional
-- [ ] Test-question association ready
+- [x] Question CRUD working
+- [x] Question bank functional
+- [x] Test-question association ready
 
 ---
 
@@ -168,11 +168,11 @@ Participant bisa join test dan mengerjakan soal.
    - Prevent double submit
 
 ### Deliverables
-- [ ] Join flow working
-- [ ] Attempt creation functional
-- [ ] Test UI complete
-- [ ] Auto-save working
-- [ ] Timer system accurate
+- [x] Join flow working
+- [x] Attempt creation functional
+- [x] Test UI complete
+- [x] Auto-save working
+- [x] Timer system accurate
 
 ---
 
@@ -215,9 +215,9 @@ Automatic grading untuk MCQ, manual grading untuk essay.
    - Points awarded
 
 ### Deliverables
-- [ ] MCQ auto-grading working
-- [ ] Essay manual grading functional
-- [ ] Result dashboard complete
+- [x] MCQ auto-grading working
+- [x] Essay manual grading functional
+- [x] Result dashboard complete
 
 ---
 
@@ -250,9 +250,9 @@ Basic deterrence dan event logging.
    - Log warning count
 
 ### Deliverables
-- [ ] Fullscreen detection working
-- [ ] Tab switching detection
-- [ ] Event logging active
+- [x] Fullscreen detection working
+- [x] Tab switching detection
+- [x] Event logging active
 
 ---
 
@@ -284,8 +284,8 @@ Export results ke Excel.
    - Date formatting
 
 ### Deliverables
-- [ ] Excel export working
-- [ ] Authorization enforced
+- [x] Excel export working
+- [x] Authorization enforced
 
 ---
 
@@ -330,10 +330,74 @@ Provider bisa generate soal dari PDF menggunakan AI.
    - Polling for status updates
 
 ### Deliverables
-- [ ] PDF upload working
-- [ ] AI generation functional
-- [ ] Review flow complete
-- [ ] Questions saved to bank
+- [x] PDF upload working
+- [x] AI generation functional
+- [x] Review flow complete
+- [x] Questions saved to bank
+
+---
+
+## Phase 9 — Question Bank Management
+
+**Status: selesai (13 Oktober 2026, `feature/phase-9-question-bank`)**
+
+### Goal
+Soal dapat dikelola sebagai library reusable di luar test dan diimpor ke test mana pun.
+
+### Tasks
+1. **Question Bank CRUD** — halaman Index/Create/Edit/Show, pencarian + paginasi
+2. **Authorization** — `QuestionBankPolicy` owner-only
+3. **Reusable Import** — clone soal + opsi dari bank ke test tujuan (file gambar di-copy, `sort_order` lanjutan)
+4. **Integrasi UI** — menu sidebar aktif, tombol "From Bank" di workspace soal test
+
+### Deliverables
+- [x] Question bank CRUD working
+- [x] Ownership policy enforced
+- [x] Import/clone into test working
+
+---
+
+## Phase 10 — Results Enhancement
+
+**Status: selesai (19 Oktober 2026, `feature/phase-10-results-enhancement`)**
+
+### Goal
+Dashboard hasil global, statistik per test yang lengkap, dan export yang bisa difilter.
+
+### Tasks
+1. **Passing Score** — kolom `passing_score` per test (migration + form Create/Edit)
+2. **Global Results** — halaman `/results`: ringkasan semua test (peserta, completed, rata-rata, pass rate) + tabel per test
+3. **Per-Test Results** — filter status peserta, kartu pass rate/unanswered, tombol export
+4. **Export Enhancement** — filter status & rentang tanggal, opsi CSV selain Excel
+5. **Sidebar** — menu Results aktif
+
+### Deliverables
+- [x] Passing score configurable
+- [x] Global results dashboard working
+- [x] Per-test filters working
+- [x] Filtered Excel/CSV export working
+
+---
+
+## Phase 11 — Settings
+
+**Status: berikutnya**
+
+### Goal
+Preferensi user, default test, dan integrasi.
+
+### Tasks
+1. **Profile** — nama, email, avatar, ubah password (sebagian sudah ada di halaman Profile)
+2. **Test Defaults** — durasi default, jumlah soal default, auto-publish, default show_result
+3. **Appearance** — tema (light/dark/system), bahasa (id/en)
+4. **Notifications** — email saat ada attempt baru, ringkasan harian/mingguan
+5. **API / Integrations** — API key management, webhook hasil test
+6. **Danger Zone** — hapus akun, export data
+
+### Deliverables
+- [ ] Settings pages working
+- [ ] Test defaults applied on create
+- [ ] Notification preferences saved
 
 ---
 
@@ -355,6 +419,12 @@ Phase 6: Anti-Cheat (Detection, Logging)
 Phase 7: Excel Export
     ↓
 Phase 8: AI Generation (PDF → Questions)
+    ↓
+Phase 9: Question Bank (Reusable Library)  ✅
+    ↓
+Phase 10: Results Enhancement  ✅
+    ↓
+Phase 11: Settings  ← next
 ```
 
 ## Key Principles

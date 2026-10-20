@@ -14,9 +14,12 @@ class AttemptDetailsExport implements FromCollection, WithHeadings, WithMapping,
 {
     protected Test $test;
 
-    public function __construct(Test $test)
+    protected array $filters;
+
+    public function __construct(Test $test, array $filters = [])
     {
         $this->test = $test;
+        $this->filters = $filters;
     }
 
     public function collection()
@@ -26,6 +29,7 @@ class AttemptDetailsExport implements FromCollection, WithHeadings, WithMapping,
             ->mapWithKeys(fn($q) => [$q->id => ($q->pivot->points ?? $q->points)]);
 
         $attempts = $this->test->attempts()
+            ->filtered($this->filters)
             ->with(['answers.question.options', 'answers.questionOption'])
             ->latest()
             ->get();

@@ -24,6 +24,7 @@ class Test extends Model
         'duration_minutes',
         'status',
         'show_result',
+        'passing_score',
     ];
 
     protected function casts(): array
@@ -34,6 +35,7 @@ class Test extends Model
             'duration_minutes' => 'integer',
             'status' => TestStatus::class,
             'show_result' => 'boolean',
+            'passing_score' => 'integer',
         ];
     }
 
