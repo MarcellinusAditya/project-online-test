@@ -9,6 +9,7 @@ export default function TestsCreate() {
         end_at: '',
         duration_minutes: 60,
         show_result: true,
+        passing_score: 70,
     });
 
     const submit = (e: React.FormEvent) => {
@@ -149,6 +150,28 @@ export default function TestsCreate() {
                                 </div>
                                 {errors.duration_minutes && (
                                     <p className="text-sm text-error">{errors.duration_minutes}</p>
+                                )}
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                                <label className="text-title-sm text-on-surface" htmlFor="passing_score">Passing Score</label>
+                                <div className="flex items-center gap-3">
+                                    <div className="relative w-32">
+                                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">workspace_premium</span>
+                                        <input
+                                            type="number"
+                                            id="passing_score"
+                                            min={0}
+                                            max={100}
+                                            value={data.passing_score}
+                                            onChange={(e) => setData('passing_score', parseInt(e.target.value))}
+                                            className="w-full rounded bg-surface-bright border border-outline-variant pl-10 pr-4 py-3 text-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                                        />
+                                    </div>
+                                    <span className="text-body-md text-on-surface-variant">% minimum to pass</span>
+                                </div>
+                                {errors.passing_score && (
+                                    <p className="text-sm text-error">{errors.passing_score}</p>
                                 )}
                             </div>
                         </section>

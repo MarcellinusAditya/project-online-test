@@ -100,4 +100,12 @@ class Attempt extends Model
     {
         return $query->whereIn('status', [AttemptStatus::SUBMITTED, AttemptStatus::EXPIRED]);
     }
+
+    public function scopeFiltered($query, array $filters)
+    {
+        return $query
+            ->when(($filters['status'] ?? 'all') !== 'all', fn($q) => $q->where('status', $filters['status']))
+            ->when($filters['date_from'] ?? null, fn($q) => $q->whereDate('started_at', '>=', $filters['date_from']))
+            ->when($filters['date_to'] ?? null, fn($q) => $q->whereDate('started_at', '<=', $filters['date_to']));
+    }
 }

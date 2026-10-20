@@ -209,6 +209,10 @@ export default function TestsShow({ test }: TestShowProps) {
                                 </span>
                             </li>
                             <li className="flex items-center justify-between text-body-sm border-t border-outline-variant pt-3">
+                                <span className="text-on-surface-variant">Passing Score</span>
+                                <span className="font-semibold text-on-surface">{test.passing_score ?? 70}%</span>
+                            </li>
+                            <li className="flex items-center justify-between text-body-sm border-t border-outline-variant pt-3">
                                 <span className="text-on-surface-variant">Randomize Questions</span>
                                 <span className="material-symbols-outlined text-outline">cancel</span>
                             </li>

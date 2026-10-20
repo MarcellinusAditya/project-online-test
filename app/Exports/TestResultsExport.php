@@ -9,16 +9,19 @@ class TestResultsExport implements WithMultipleSheets
 {
     protected Test $test;
 
-    public function __construct(Test $test)
+    protected array $filters;
+
+    public function __construct(Test $test, array $filters = [])
     {
         $this->test = $test;
+        $this->filters = $filters;
     }
 
     public function sheets(): array
     {
         return [
-            new AttemptsExport($this->test),
-            new AttemptDetailsExport($this->test),
+            new AttemptsExport($this->test, $this->filters),
+            new AttemptDetailsExport($this->test, $this->filters),
         ];
     }
 }

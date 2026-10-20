@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AttemptEventType;
+use App\Exports\AttemptsExport;
 use App\Exports\TestResultsExport;
 use App\Models\Attempt;
 use App\Models\AttemptAnswer;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Excel as ExcelFormat;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -22,7 +24,13 @@ class TestResultController extends Controller
     {
         Gate::authorize('view', $test);
 
-        $search = $request->input('search');
+        $validated = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+            'status' => ['nullable', 'string', 'in:all,in_progress,submitted,expired,grading'],
+        ]);
+
+        $search = $validated['search'] ?? null;
+        $status = $validated['status'] ?? 'all';
 
         $suspiciousTypes = [
             AttemptEventType::FULLSCREEN_EXITED->value,
@@ -31,26 +39,36 @@ class TestResultController extends Controller
             AttemptEventType::WARNING_ISSUED->value,
         ];
 
-        $attempts = $test->attempts()
-            ->withCount([
-                'events as warnings_count' => fn($q) => $q->whereIn('event_type', $suspiciousTypes),
-            ])
+        $baseQuery = fn() => $test->attempts()
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('participant_name', 'like', "%{$search}%")
                       ->orWhere('participant_identifier', 'like', "%{$search}%");
                 });
             })
+            ->when($status !== 'all', fn($q) => $q->where('status', $status));
+
+        $attempts = $baseQuery()
+            ->withCount([
+                'events as warnings_count' => fn($q) => $q->whereIn('event_type', $suspiciousTypes),
+            ])
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
+        $statsQuery = fn() => $baseQuery();
+        $graded = $statsQuery()->whereNotNull('score')->count();
+        $passing = $statsQuery()->whereNotNull('score')->where('score', '>=', $test->passing_score)->count();
+
         $stats = [
-            'total_attempts' => $test->attempts()->count(),
-            'completed_attempts' => $test->attempts()->completed()->count(),
-            'average_score' => round($test->attempts()->whereNotNull('score')->avg('score') ?? 0),
-            'highest_score' => $test->attempts()->max('score') ?? 0,
-            'lowest_score' => $test->attempts()->whereNotNull('score')->min('score') ?? 0,
+            'total_attempts' => $statsQuery()->count(),
+            'completed_attempts' => $statsQuery()->completed()->count(),
+            'average_score' => round($statsQuery()->whereNotNull('score')->avg('score') ?? 0),
+            'highest_score' => $statsQuery()->max('score') ?? 0,
+            'lowest_score' => $statsQuery()->whereNotNull('score')->min('score') ?? 0,
+            'pass_rate' => $graded > 0 ? round(($passing / $graded) * 100) : 0,
+            'passing_attempts' => $passing,
+            'unanswered_total' => $statsQuery()->sum('total_unanswered'),
         ];
 
         return Inertia::render('Tests/Results/Index', [
@@ -59,6 +77,7 @@ class TestResultController extends Controller
             'stats' => $stats,
             'filters' => [
                 'search' => $search,
+                'status' => $status,
             ],
         ]);
     }
@@ -173,9 +192,32 @@ class TestResultController extends Controller
     {
         Gate::authorize('view', $test);
 
-        $filename = Str::slug($test->title).'-results-'.now()->format('Ymd-His').'.xlsx';
+        $validated = $request->validate([
+            'status' => ['nullable', 'string', 'in:all,in_progress,submitted,expired,grading'],
+            'date_from' => ['nullable', 'date'],
+            'date_to' => ['nullable', 'date', 'after_or_equal:date_from'],
+            'format' => ['nullable', 'string', 'in:xlsx,csv'],
+        ]);
 
-        return Excel::download(new TestResultsExport($test), $filename);
+        $filters = [
+            'status' => $validated['status'] ?? 'all',
+            'date_from' => $validated['date_from'] ?? null,
+            'date_to' => $validated['date_to'] ?? null,
+        ];
+
+        $format = $validated['format'] ?? 'xlsx';
+        $extension = $format === 'csv' ? 'csv' : 'xlsx';
+        $writerType = $format === 'csv' ? ExcelFormat::CSV : ExcelFormat::XLSX;
+
+        $filename = Str::slug($test->title).'-results-'.now()->format('Ymd-His').'.'.$extension;
+
+        // CSV is single-sheet, so export the participants sheet explicitly instead of
+        // letting the multi-sheet export silently drop the question-details sheet.
+        $export = $format === 'csv'
+            ? new AttemptsExport($test, $filters)
+            : new TestResultsExport($test, $filters);
+
+        return Excel::download($export, $filename, $writerType);
     }
 
     private function recalculateAttemptScore(Attempt $attempt): void

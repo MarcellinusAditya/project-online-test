@@ -22,6 +22,7 @@ class TestRequest extends FormRequest
             'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
             'duration_minutes' => ['required', 'integer', 'min:1', 'max:480'],
             'show_result' => ['boolean'],
+            'passing_score' => ['sometimes', 'integer', 'min:0', 'max:100'],
         ];
     }
 }

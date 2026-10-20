@@ -15,11 +15,14 @@ class AttemptsExport implements FromCollection, WithHeadings, WithMapping, WithS
 {
     protected Test $test;
 
+    protected array $filters;
+
     protected array $suspiciousTypes = [];
 
-    public function __construct(Test $test)
+    public function __construct(Test $test, array $filters = [])
     {
         $this->test = $test;
+        $this->filters = $filters;
         $this->suspiciousTypes = [
             AttemptEventType::FULLSCREEN_EXITED->value,
             AttemptEventType::TAB_HIDDEN->value,
@@ -31,6 +34,7 @@ class AttemptsExport implements FromCollection, WithHeadings, WithMapping, WithS
     public function collection()
     {
         return $this->test->attempts()
+            ->filtered($this->filters)
             ->withCount(['events as warnings_count' => fn($q) => $q->whereIn('event_type', $this->suspiciousTypes)])
             ->with('test')
             ->latest()
